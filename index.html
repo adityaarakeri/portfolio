@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>:// adi</title>
+  <!-- Runs before first paint so hero elements start hidden with no flash -->
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --bg:           #131411;
+      --bg-card:      #1a1c18;
+      --bg-card-hover:#1f211d;
+      --border:       rgba(160, 200, 140, 0.12);
+      --border-hover: rgba(160, 200, 140, 0.28);
+      --text-primary: #d4d9cc;
+      --text-secondary:#8a9180;
+      --text-dim:     #565c50;
+      --accent:       #7ecb8f;
+      --accent-dim:   rgba(126, 203, 143, 0.15);
+      --accent-glow:  rgba(126, 203, 143, 0.06);
+      --warn:         #c8a96e;
+
+      --font:         'JetBrains Mono', 'Courier New', monospace;
+
+      --size-display: clamp(2.4rem, 6vw, 4.2rem);
+      --size-heading: clamp(1rem, 2.5vw, 1.25rem);
+      --size-body:    0.875rem;
+      --size-label:   0.7rem;
+
+      --space-section: clamp(80px, 12vw, 140px);
+      --space-card:    28px;
+      --max-width:     860px;
+      --radius:        6px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: var(--size-body);
+      font-weight: 400;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       BACKGROUND — GRID + PARTICLE LAYER
+    ============================================================ */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(126,203,143,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(126,203,143,0.028) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* Spotlight: a brighter copy of the grid, revealed only in a soft
+       circle around the pointer. --sx/--sy are written by JS. These are
+       plain custom properties on a normal style (not inside keyframes),
+       so they update live without the Chromium keyframe caveat. */
+    .bg-spotlight {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      --sx: -1000px;
+      --sy: -1000px;
+      background-image:
+        linear-gradient(rgba(126,203,143,0.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(126,203,143,0.16) 1px, transparent 1px);
+      background-size: 52px 52px;
+      -webkit-mask-image: radial-gradient(circle 240px at var(--sx) var(--sy), rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 45%, transparent 100%);
+              mask-image: radial-gradient(circle 240px at var(--sx) var(--sy), rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 45%, transparent 100%);
+    }
+    /* No hover on touch devices, so no spotlight */
+    @media (hover: none) {
+      .bg-spotlight { display: none; }
+    }
+
+    .bg-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 100% 90% at 50% 0%, transparent 50%, var(--bg) 100%);
+    }
+
+    /* Floating SVG doodles */
+    .bg-glyphs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Two-layer motion system:
+       - .doodle (outer)  → JS owns its inline transform (repel)
+       - .doodle svg      → CSS owns the drift animation (bob + rotate + scale)
+       Never mix the two. var() inside @keyframes does not update
+       reliably mid-animation in Chromium, which is why the repel
+       must live on a separate element as a plain inline transform. */
+    .doodle {
+      position: absolute;
+      user-select: none;
+      will-change: transform;
+      --doodle-scale: 0.72;
+    }
+    .doodle svg {
+      display: block;
+      stroke: #7ecb8f;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      opacity: 0.22;
+      filter: drop-shadow(0 0 8px rgba(126,203,143,0.12));
+      transform-origin: center;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    /* Placement on the outer element, motion path + timing on the svg */
+    .doodle-robot        { top: 6%;   left: 2.5%;  }
+    .doodle-rocket       { top: 30%;  left: 1.5%;  }
+    .doodle-code         { top: 62%;  left: 2%;    }
+    .doodle-ai           { top: 10%;  right: 2%;   }
+    .doodle-machine      { top: 50%;  right: 1.5%; }
+    .doodle-robot2       { top: 82%;  right: 2.5%; }
+
+    /* Each doodle gets one of three wander paths + its own tempo + offset,
+       so no two ever move in sync. Durations are short enough to read as
+       "always moving" but slow enough to stay calm. */
+    .doodle-robot   svg  { animation-name: doodle-float-a; animation-duration: 14s; animation-delay: -2s;  }
+    .doodle-rocket  svg  { animation-name: doodle-float-b; animation-duration: 16s; animation-delay: -7s;  }
+    .doodle-code    svg  { animation-name: doodle-float-c; animation-duration: 18s; animation-delay: -11s; }
+    .doodle-ai      svg  { animation-name: doodle-float-b; animation-duration: 13s; animation-delay: -4s;  }
+    .doodle-machine svg  { animation-name: doodle-float-a; animation-duration: 17s; animation-delay: -9s;  }
+    .doodle-robot2  svg  { animation-name: doodle-float-c; animation-duration: 15s; animation-delay: -13s; }
+
+    /* Path A — a slow clockwise meander */
+    @keyframes doodle-float-a {
+      0%   { transform: scale(var(--doodle-scale)) translate(0px, 0px)     rotate(-2deg);  }
+      20%  { transform: scale(var(--doodle-scale)) translate(16px, -18px)  rotate(1.5deg); }
+      40%  { transform: scale(var(--doodle-scale)) translate(24px, -4px)   rotate(3deg);   }
+      60%  { transform: scale(var(--doodle-scale)) translate(9px, 16px)    rotate(-1deg);  }
+      80%  { transform: scale(var(--doodle-scale)) translate(-15px, 7px)   rotate(-3deg);  }
+      100% { transform: scale(var(--doodle-scale)) translate(0px, 0px)     rotate(-2deg);  }
+    }
+
+    /* Path B — a counter meander, mirror of A */
+    @keyframes doodle-float-b {
+      0%   { transform: scale(var(--doodle-scale)) translate(0px, 0px)     rotate(2deg);   }
+      20%  { transform: scale(var(--doodle-scale)) translate(-18px, 13px)  rotate(-1.5deg);}
+      40%  { transform: scale(var(--doodle-scale)) translate(-26px, -9px)  rotate(-3deg);  }
+      60%  { transform: scale(var(--doodle-scale)) translate(-7px, -20px)  rotate(1deg);   }
+      80%  { transform: scale(var(--doodle-scale)) translate(17px, -5px)   rotate(3deg);   }
+      100% { transform: scale(var(--doodle-scale)) translate(0px, 0px)     rotate(2deg);   }
+    }
+
+    /* Path C — a gentle figure-eight sway */
+    @keyframes doodle-float-c {
+      0%   { transform: scale(var(--doodle-scale)) translate(0px, 0px)     rotate(0deg);    }
+      25%  { transform: scale(var(--doodle-scale)) translate(20px, -13px)  rotate(2.5deg);  }
+      50%  { transform: scale(var(--doodle-scale)) translate(0px, -24px)   rotate(0deg);    }
+      75%  { transform: scale(var(--doodle-scale)) translate(-20px, -13px) rotate(-2.5deg); }
+      100% { transform: scale(var(--doodle-scale)) translate(0px, 0px)     rotate(0deg);    }
+    }
+
+    /* Respect users who ask the OS to reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      .doodle svg { animation: none; }
+    }
+
+    /* Mobile: peek from edges at reduced scale and opacity */
+    @media (max-width: 1100px) {
+      .doodle { --doodle-scale: 0.46; }
+      .doodle svg { opacity: 0.13; }
+
+      .doodle-robot  { left: -30px;        top: 8%;  }
+      .doodle-rocket { left: -26px;        top: 32%; }
+      .doodle-code   { left: -32px;        top: 64%; }
+      .doodle-ai     { right: -32px; left: auto; top: 14%; }
+      .doodle-machine{ right: -34px; left: auto; top: 50%; }
+      .doodle-robot2 { right: -26px; left: auto; top: 80%; }
+    }
+
+    /* ============================================================
+       LAYOUT SHELL
+    ============================================================ */
+    .site-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 60px);
+    }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--text-dim); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: var(--size-label);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Burger button — hidden on desktop */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 1001;
+      position: relative;
+    }
+    .nav-burger span {
+      display: block;
+      width: 100%;
+      height: 1.5px;
+      background: var(--text-secondary);
+      border-radius: 2px;
+      transform-origin: center;
+      transition: transform 240ms ease, opacity 180ms ease, background 200ms ease;
+    }
+    .nav-burger:hover span { background: var(--accent); }
+    .nav-burger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg);  }
+    .nav-burger.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0);             }
+    .nav-burger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-burger.is-open span              { background: var(--accent); }
+
+    /* Full-screen mobile overlay — at body level, no stacking context issues */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;          /* body-level, above everything */
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;     /* removes from hit-testing when closed */
+      pointer-events: none;
+      transition: opacity 260ms ease, visibility 260ms ease;
+    }
+    .mobile-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+    .mobile-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(126,203,143,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(126,203,143,0.028) 1px, transparent 1px);
+      background-size: 52px 52px;
+      pointer-events: none;
+    }
+    .mobile-overlay-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .mobile-overlay-links li {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 240ms ease, transform 240ms ease;
+    }
+    .mobile-overlay.is-open .mobile-overlay-links li:nth-child(1) { opacity: 1; transform: none; transition-delay: 80ms;  }
+    .mobile-overlay.is-open .mobile-overlay-links li:nth-child(2) { opacity: 1; transform: none; transition-delay: 130ms; }
+    .mobile-overlay.is-open .mobile-overlay-links li:nth-child(3) { opacity: 1; transform: none; transition-delay: 180ms; }
+    .mobile-overlay.is-open .mobile-overlay-links li:nth-child(4) { opacity: 1; transform: none; transition-delay: 230ms; }
+    .mobile-overlay-links a {
+      font-family: var(--font);
+      font-size: clamp(1.8rem, 9vw, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: block;
+      padding: 14px 32px;
+      transition: color 180ms ease;
+    }
+    .mobile-overlay-links a:hover,
+    .mobile-overlay-links a:focus { color: var(--accent); }
+    .mobile-overlay-footer {
+      position: absolute;
+      bottom: 36px;
+      font-size: var(--size-label);
+      letter-spacing: 0.14em;
+      color: var(--text-dim);
+    }
+    .mobile-overlay-footer span { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .nav-links  { display: none; }
+      .nav-burger { display: flex; }
+
+      /* Pin burger above the open overlay on mobile */
+      .nav-burger {
+        position: relative;
+        z-index: 9001;
+      }
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      padding: var(--space-section) 0 clamp(60px, 8vw, 100px);
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: var(--size-label);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+    }
+    .hero-eyebrow::before { content: '//'; margin-right: 8px; color: var(--accent); }
+
+    /* Terminal prompt variant of the eyebrow */
+    .hero-terminal {
+      text-transform: none;
+      letter-spacing: 0.06em;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      min-height: 1.4em;
+    }
+    .hero-terminal::before { content: none; }
+    .term-prompt { color: var(--accent); margin-right: 0.6em; }
+    .term-cmd    { color: var(--text-primary); white-space: pre; }
+    .term-cursor {
+      display: inline-block;
+      width: 0.55em;
+      height: 1.05em;
+      margin-left: 2px;
+      background: var(--accent);
+      vertical-align: text-bottom;
+      animation: term-blink 1s steps(2, start) infinite;
+      transition: opacity 400ms ease;
+    }
+    @keyframes term-blink { to { visibility: hidden; } }
+    .hero.is-typed .term-cursor { opacity: 0; animation: none; }
+
+    /* Name, tagline and status wait for the prompt to finish, then
+       cascade in. Only hidden when JS is present, so no-JS still works. */
+    .js .hero:not(.is-typed) .hero-name,
+    .js .hero:not(.is-typed) .hero-tagline,
+    .js .hero:not(.is-typed) .hero-status {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .hero-name, .hero-tagline, .hero-status {
+      transition: opacity 600ms ease, transform 600ms ease;
+    }
+    .hero.is-typed .hero-tagline { transition-delay: 140ms; }
+    .hero.is-typed .hero-status  { transition-delay: 280ms; }
+
+    .hero-name {
+      font-size: var(--size-display);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+    .hero-name em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 52ch;
+      margin: 0 auto 48px;
+      line-height: 1.75;
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: var(--size-label);
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      border: 1px dashed var(--border);
+      padding: 8px 18px;
+      border-radius: 100px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1;   box-shadow: 0 0 0 0 rgba(126,203,143,0.4); }
+      50%       { opacity: 0.7; box-shadow: 0 0 0 5px rgba(126,203,143,0); }
+    }
+
+    /* ============================================================
+       SECTION LABEL
+    ============================================================ */
+    .section-label {
+      font-size: var(--size-label);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+    }
+    .section-label::before { content: '[ '; color: var(--accent); }
+    .section-label::after  { content: ' ]'; color: var(--accent); }
+
+    /* ============================================================
+       PROJECTS
+    ============================================================ */
+    .projects { padding: 0 0 var(--space-section); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    /* One primary signal (dashed -> solid, in accent) and one secondary
+       (the arrow). Nothing moves the box. Focus mirrors hover exactly. */
+    .project-card {
+      background: var(--bg-card);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-card);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
+      transform-origin: center;
+    }
+    /* Shared interactive-tile state: project cards and writing posts
+       behave identically so the page has one hover language. */
+    .project-card:hover,
+    .project-card:focus-visible,
+    .post-item:hover,
+    .post-item:focus-visible {
+      border-style: solid;
+      border-color: rgba(126,203,143,0.55);
+      background: var(--bg-card-hover);
+      /* A quiet pop: 1.5% is enough to feel inviting, not enough to feel bouncy */
+      transform: scale(1.015);
+    }
+    /* Press feedback: settles back down under the pointer */
+    .project-card:active,
+    .post-item:active {
+      transform: scale(0.995);
+      transition-duration: 90ms;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .project-card:hover,  .project-card:focus-visible,  .project-card:active,
+      .post-item:hover,     .post-item:focus-visible,     .post-item:active { transform: none; }
+    }
+    /* Focus ring matches the tile's own radius */
+    .project-card:focus-visible,
+    .post-item:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: var(--radius);
+    }
+
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: rgba(126,203,143,0.06);
+      flex-shrink: 0;
+    }
+    .card-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-tagline {
+      font-size: var(--size-body);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .card-tagline em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    /* Card footer: metadata, not a fake link. The whole card is the link. */
+    .card-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0 10px;
+      margin-top: 6px;
+      font-size: var(--size-label);
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+    .card-meta .sep { color: var(--text-dim); opacity: 0.5; }
+    .card-meta .go  { color: var(--accent); display: inline-flex; align-items: center; gap: 4px; }
+    .card-meta .arrow {
+      display: inline-block;
+      transition: transform 200ms ease;
+    }
+    /* Hover moves only the arrow, on the compositor. Text never reflows. */
+    .project-card:hover .arrow,
+    .project-card:focus-visible .arrow,
+    .post-item:hover .arrow,
+    .post-item:focus-visible .arrow { transform: translate(2px, -2px); }
+
+    /* Visually hidden, still read by screen readers */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ============================================================
+       ABOUT
+    ============================================================ */
+    .about {
+      padding: 0 0 var(--space-section);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    @media (max-width: 620px) {
+      .about { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .about-text p {
+      font-size: var(--size-body);
+      color: var(--text-secondary);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { color: var(--text-primary); font-weight: 500; }
+    .about-text a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--border-hover);
+      transition: border-color 200ms ease;
+    }
+    .about-text a:hover { border-color: var(--accent); }
+
+    .about-stack {}
+    .stack-title {
+      font-size: var(--size-label);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+    .stack-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .stack-list li {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stack-list li::before {
+      content: '→';
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+
+    /* ============================================================
+       POSTS
+    ============================================================ */
+    .posts { padding: 0 0 var(--space-section); }
+
+    .posts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .post-item {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      padding: 16px 20px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
+      transform-origin: center;
+    }
+    .post-id {
+      font-size: var(--size-label);
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+    .post-title {
+      font-size: var(--size-body);
+      color: var(--text-primary);
+      flex: 1;
+    }
+    .post-date {
+      font-size: var(--size-label);
+      color: var(--text-dim);
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .post-date .arrow { color: var(--accent); }
+
+    /* ============================================================
+       CONTACT
+    ============================================================ */
+    .contact {
+      padding: 0 0 var(--space-section);
+      text-align: center;
+    }
+    .contact-heading {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+    .contact-sub {
+      font-size: var(--size-body);
+      color: var(--text-secondary);
+      margin-bottom: 36px;
+    }
+    .contact-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border: 1px dashed var(--border);
+      padding: 10px 22px;
+      border-radius: 100px;
+      transition: color 200ms ease, border-color 200ms ease;
+    }
+    .contact-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .contact-link.primary {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: rgba(126,203,143,0.3);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-size: var(--size-label);
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+    .footer-right {
+      font-size: var(--size-label);
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    /* ============================================================
+       DIVIDER
+    ============================================================ */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0 0 var(--space-section);
+    }
+
+    /* ============================================================
+       ANIMATIONS — PAGE LOAD REVEALS
+    ============================================================ */
+    /* Load reveal. Fill mode is 'backwards' on purpose: it holds the hidden
+       state during the delay, then hands control back to normal styles once
+       the animation ends. 'forwards' would pin the transform forever and
+       silently block every :hover transform on the element. */
+    .reveal { animation: reveal-up 0.6s ease backwards; }
+    @keyframes reveal-up {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll reveal, class-based. Same rule: once revealed, the classes come
+       off so the element is back to plain stylesheet control. */
+    .js .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .js .reveal-on-scroll.is-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    .reveal-1 { animation-delay: 0.05s; }
+    .reveal-2 { animation-delay: 0.15s; }
+    .reveal-3 { animation-delay: 0.25s; }
+    .reveal-4 { animation-delay: 0.35s; }
+    .reveal-5 { animation-delay: 0.45s; }
+    .reveal-6 { animation-delay: 0.55s; }
+
+    /* ============================================================
+       CURSOR RING
+       The native cursor stays. This ring trails behind it, so
+       pointer precision is untouched and it degrades to nothing.
+    ============================================================ */
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9500;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1);
+      transition: opacity 250ms ease, width 220ms ease, height 220ms ease, border-color 220ms ease, background 220ms ease;
+      will-change: transform;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring.is-visible { opacity: 0.7; }
+    /* Over links and buttons: grow and tint */
+    .cursor-ring.is-hover {
+      width: 44px;
+      height: 44px;
+      background: rgba(126,203,143,0.08);
+      border-color: rgba(126,203,143,0.9);
+    }
+    /* Mouse held down: pinch in */
+    .cursor-ring.is-down { width: 18px; height: 18px; }
+
+    /* Touch devices have no cursor. Reduced motion users skip the lag. */
+    @media (hover: none) { .cursor-ring { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .cursor-ring { display: none; } }
+
+    /* ============================================================
+       FOCUS / A11Y
+    ============================================================ */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    /* ============================================================
+       RESPONSIVE ADJUSTMENTS
+    ============================================================ */
+    @media (max-width: 480px) {
+      .nav-links { gap: 20px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .post-item { flex-wrap: wrap; gap: 6px; }
+      .post-date { display: none; }
+    }
+
+    @media (max-width: 375px) {
+      .nav-links li:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- BACKGROUND LAYERS -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-spotlight" aria-hidden="true"></div>
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <div class="bg-glyphs" aria-hidden="true">
+
+    <!-- ROBOT -->
+    <div class="doodle doodle-robot">
+      <svg width="88" height="100" viewBox="0 0 88 100" stroke-width="2">
+        <!-- antenna -->
+        <line x1="44" y1="4" x2="44" y2="18"/>
+        <circle cx="44" cy="4" r="3"/>
+        <!-- head -->
+        <rect x="18" y="18" width="52" height="36" rx="6"/>
+        <!-- eyes -->
+        <rect x="27" y="28" width="12" height="10" rx="2"/>
+        <rect x="49" y="28" width="12" height="10" rx="2"/>
+        <!-- eye pupils -->
+        <circle cx="33" cy="33" r="3" fill="rgba(126,203,143,0.25)" stroke="none"/>
+        <circle cx="55" cy="33" r="3" fill="rgba(126,203,143,0.25)" stroke="none"/>
+        <!-- mouth -->
+        <rect x="30" y="44" width="28" height="4" rx="2"/>
+        <!-- neck -->
+        <line x1="38" y1="54" x2="38" y2="62"/>
+        <line x1="50" y1="54" x2="50" y2="62"/>
+        <!-- body -->
+        <rect x="22" y="62" width="44" height="28" rx="5"/>
+        <!-- chest panel -->
+        <rect x="32" y="68" width="10" height="8" rx="2"/>
+        <rect x="46" y="68" width="10" height="8" rx="2"/>
+        <line x1="32" y1="80" x2="56" y2="80"/>
+        <!-- arms -->
+        <line x1="22" y1="66" x2="10" y2="72"/>
+        <circle cx="9" cy="74" r="4"/>
+        <line x1="66" y1="66" x2="78" y2="72"/>
+        <circle cx="79" cy="74" r="4"/>
+        <!-- legs -->
+        <line x1="34" y1="90" x2="30" y2="100"/>
+        <line x1="54" y1="90" x2="58" y2="100"/>
+      </svg>
+    </div>
+
+    <!-- ROCKET -->
+    <div class="doodle doodle-rocket">
+      <svg width="72" height="110" viewBox="0 0 72 110" stroke-width="2">
+        <!-- rocket body -->
+        <path d="M36 8 C20 20 14 45 14 65 L58 65 C58 45 52 20 36 8 Z"/>
+        <!-- nose tip detail -->
+        <path d="M30 22 Q36 14 42 22" stroke-width="1.5" opacity="0.6"/>
+        <!-- window -->
+        <circle cx="36" cy="42" r="9"/>
+        <circle cx="36" cy="42" r="5" fill="rgba(126,203,143,0.15)" stroke-width="1"/>
+        <!-- fins left -->
+        <path d="M14 65 L4 82 L18 76"/>
+        <!-- fins right -->
+        <path d="M58 65 L68 82 L54 76"/>
+        <!-- exhaust nozzle -->
+        <path d="M24 65 L22 74 L50 74 L48 65"/>
+        <!-- flames -->
+        <path d="M28 74 Q30 88 36 94 Q42 88 44 74" stroke-width="1.5" opacity="0.7"/>
+        <path d="M32 74 Q33 84 36 89 Q39 84 40 74" stroke-width="1" opacity="0.5"/>
+        <!-- small stars nearby -->
+        <line x1="6"  y1="14" x2="6"  y2="18"/> <line x1="4"  y1="16" x2="8"  y2="16"/>
+        <line x1="62" y1="30" x2="62" y2="34"/> <line x1="60" y1="32" x2="64" y2="32"/>
+        <line x1="10" y1="40" x2="10" y2="42"/> <line x1="9"  y1="41" x2="11" y2="41"/>
+      </svg>
+    </div>
+
+    <!-- CODE WINDOW -->
+    <div class="doodle doodle-code">
+      <svg width="96" height="78" viewBox="0 0 96 78" stroke-width="2">
+        <!-- window frame -->
+        <rect x="4" y="4" width="88" height="70" rx="7"/>
+        <!-- title bar -->
+        <line x1="4" y1="20" x2="92" y2="20"/>
+        <!-- window dots -->
+        <circle cx="16" cy="12" r="3.5"/>
+        <circle cx="28" cy="12" r="3.5"/>
+        <circle cx="40" cy="12" r="3.5"/>
+        <!-- code lines — varied lengths for realism -->
+        <line x1="14" y1="31" x2="46" y2="31"/>
+        <line x1="20" y1="39" x2="68" y2="39"/>
+        <line x1="20" y1="47" x2="54" y2="47"/>
+        <line x1="26" y1="55" x2="72" y2="55"/>
+        <line x1="14" y1="63" x2="38" y2="63"/>
+        <!-- bracket pair -->
+        <path d="M78 30 L74 36 L78 42" stroke-width="2"/>
+        <path d="M86 30 L90 36 L86 42" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <!-- AI / NEURAL NET -->
+    <div class="doodle doodle-ai">
+      <svg width="96" height="96" viewBox="0 0 96 96" stroke-width="1.8">
+        <!-- input nodes -->
+        <circle cx="14" cy="22" r="7"/>
+        <circle cx="14" cy="48" r="7"/>
+        <circle cx="14" cy="74" r="7"/>
+        <!-- hidden layer nodes -->
+        <circle cx="48" cy="14" r="7"/>
+        <circle cx="48" cy="35" r="7"/>
+        <circle cx="48" cy="56" r="7"/>
+        <circle cx="48" cy="78" r="7"/>
+        <!-- output node -->
+        <circle cx="82" cy="32" r="7"/>
+        <circle cx="82" cy="64" r="7"/>
+        <!-- inner fills -->
+        <circle cx="48" cy="35" r="3" fill="rgba(126,203,143,0.2)" stroke="none"/>
+        <circle cx="82" cy="48" r="4" fill="rgba(126,203,143,0.15)" stroke="none"/>
+        <!-- connections — input to hidden -->
+        <line x1="21" y1="22" x2="41" y2="14"  opacity="0.5"/>
+        <line x1="21" y1="22" x2="41" y2="35"  opacity="0.5"/>
+        <line x1="21" y1="22" x2="41" y2="56"  opacity="0.3"/>
+        <line x1="21" y1="48" x2="41" y2="14"  opacity="0.3"/>
+        <line x1="21" y1="48" x2="41" y2="35"  opacity="0.5"/>
+        <line x1="21" y1="48" x2="41" y2="56"  opacity="0.5"/>
+        <line x1="21" y1="48" x2="41" y2="78"  opacity="0.3"/>
+        <line x1="21" y1="74" x2="41" y2="56"  opacity="0.5"/>
+        <line x1="21" y1="74" x2="41" y2="78"  opacity="0.5"/>
+        <!-- connections — hidden to output -->
+        <line x1="55" y1="14" x2="75" y2="32"  opacity="0.5"/>
+        <line x1="55" y1="35" x2="75" y2="32"  opacity="0.5"/>
+        <line x1="55" y1="35" x2="75" y2="64"  opacity="0.3"/>
+        <line x1="55" y1="56" x2="75" y2="32"  opacity="0.3"/>
+        <line x1="55" y1="56" x2="75" y2="64"  opacity="0.5"/>
+        <line x1="55" y1="78" x2="75" y2="64"  opacity="0.5"/>
+      </svg>
+    </div>
+
+    <!-- AUTONOMOUS MACHINE / ROVER -->
+    <div class="doodle doodle-machine">
+      <svg width="100" height="88" viewBox="0 0 100 88" stroke-width="2">
+        <!-- body chassis -->
+        <rect x="18" y="22" width="64" height="38" rx="5"/>
+        <!-- sensor dome -->
+        <path d="M36 22 Q50 10 64 22"/>
+        <!-- rotating sensor eye -->
+        <circle cx="50" cy="19" r="5"/>
+        <circle cx="50" cy="19" r="2.5" fill="rgba(126,203,143,0.25)" stroke-width="1"/>
+        <!-- sensor line -->
+        <line x1="50" y1="14" x2="50" y2="8"/>
+        <line x1="50" y1="8"  x2="58" y2="4" opacity="0.5"/>
+        <!-- panel details -->
+        <rect x="26" y="30" width="18" height="12" rx="2"/>
+        <rect x="56" y="30" width="18" height="12" rx="2"/>
+        <!-- status lights -->
+        <circle cx="50" cy="36" r="2.5" fill="rgba(126,203,143,0.3)" stroke-width="1"/>
+        <line x1="26" y1="48" x2="74" y2="48"/>
+        <!-- arm left -->
+        <line x1="18" y1="34" x2="6"  y2="28"/>
+        <path d="M3 26 L6 28 L4 32" stroke-width="1.5"/>
+        <!-- arm right -->
+        <line x1="82" y1="34" x2="94" y2="28"/>
+        <path d="M97 26 L94 28 L96 32" stroke-width="1.5"/>
+        <!-- wheel left front -->
+        <circle cx="26" cy="66" r="12"/>
+        <circle cx="26" cy="66" r="6"/>
+        <line x1="26" y1="54" x2="26" y2="78"/>
+        <line x1="14" y1="66" x2="38" y2="66"/>
+        <!-- wheel right front -->
+        <circle cx="74" cy="66" r="12"/>
+        <circle cx="74" cy="66" r="6"/>
+        <line x1="74" y1="54" x2="74" y2="78"/>
+        <line x1="62" y1="66" x2="86" y2="66"/>
+        <!-- axle -->
+        <line x1="38" y1="60" x2="62" y2="60"/>
+      </svg>
+    </div>
+
+    <!-- ROBOT 2 — simpler variant, bottom right -->
+    <div class="doodle doodle-robot2">
+      <svg width="76" height="90" viewBox="0 0 76 90" stroke-width="2">
+        <!-- antenna -->
+        <line x1="38" y1="5" x2="38" y2="16"/>
+        <line x1="32" y1="5" x2="44" y2="5"/>
+        <circle cx="32" cy="5" r="2.5"/>
+        <circle cx="44" cy="5" r="2.5"/>
+        <!-- head -->
+        <rect x="16" y="16" width="44" height="30" rx="5"/>
+        <!-- single visor eye -->
+        <rect x="22" y="25" width="32" height="10" rx="4"/>
+        <rect x="26" y="27" width="8"  height="6" rx="2" fill="rgba(126,203,143,0.2)" stroke-width="1"/>
+        <rect x="42" y="27" width="8"  height="6" rx="2" fill="rgba(126,203,143,0.2)" stroke-width="1"/>
+        <!-- body -->
+        <rect x="20" y="50" width="36" height="28" rx="4"/>
+        <!-- chest bolt detail -->
+        <circle cx="38" cy="60" r="4"/>
+        <line x1="34" y1="72" x2="42" y2="72"/>
+        <!-- arms -->
+        <line x1="20" y1="56" x2="10" y2="64"/>
+        <rect x="6"  y="62" width="8" height="6" rx="3"/>
+        <line x1="56" y1="56" x2="66" y2="64"/>
+        <rect x="62" y="62" width="8" height="6" rx="3"/>
+        <!-- legs -->
+        <line x1="30" y1="78" x2="28" y2="90"/>
+        <line x1="46" y1="78" x2="48" y2="90"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <div class="site-wrapper">
+
+    <!-- NAV -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <a class="nav-logo" href="#"><span>://</span> adi</a>
+      <ul class="nav-links">
+        <li><a href="#projects">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#posts">Writing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero" role="banner">
+      <p class="hero-eyebrow hero-terminal" aria-label="whoami">
+        <span class="term-prompt">$</span><span class="term-cmd" data-cmd="whoami"></span><span class="term-cursor" aria-hidden="true"></span>
+      </p>
+      <h1 class="hero-name">
+        <em>Adi</em>
+      </h1>
+      <p class="hero-tagline">
+        Backend, platform, and AI security engineer.
+        Years spent keeping bots out of production systems,
+        now building guardrails that keep AI agents in line.
+      </p>
+      <div class="hero-status">
+        <span class="status-dot"></span>
+        <span>Available for new projects</span>
+      </div>
+    </header>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="projects" aria-labelledby="projects-label">
+      <p class="section-label reveal reveal-1" id="projects-label">Projects</p>
+      <div class="projects-grid">
+
+        <a href="https://github.com/adityaarakeri/llmscan" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon">◈</div>
+            <span class="card-name">llmscan</span>
+          </div>
+          <p class="card-tagline"><em>Know what your machine can run.</em></p>
+          <p class="card-desc">A fast CLI that inspects your hardware and reports which local LLMs will actually run on it, before you download 40GB to find out. Python, installable via Homebrew.</p>
+          <span class="card-meta"><span>python</span><span class="sep">·</span><span class="card-stars" data-repo="llmscan">24 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/claude-on-a-leash" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon">⬡</div>
+            <span class="card-name">claude-on-a-leash</span>
+          </div>
+          <p class="card-tagline"><em>Deterministic guardrails for coding agents.</em></p>
+          <p class="card-desc">Six hooks for Claude Code that hard-block remote code execution, credential exfiltration, SSRF, and prompt injection before a command ever runs. Ships with an MCP server so any other agent gets the same protection.</p>
+          <span class="card-meta"><span>shell</span><span class="sep">·</span><span class="card-stars" data-repo="claude-on-a-leash">5 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/gitatlas" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon">◎</div>
+            <span class="card-name">gitatlas</span>
+          </div>
+          <p class="card-tagline"><em>A map of your whole codebase in one file.</em></p>
+          <p class="card-desc">Generates a self-contained, browsable atlas of a multi-repo codebase as a single HTML file. Includes an MCP server and token-budgeted briefs so coding agents get the right context without reading everything.</p>
+          <span class="card-meta"><span>typescript</span><span class="card-stars" data-repo="gitatlas" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/senior-agent-skills" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon">▣</div>
+            <span class="card-name">senior-agent-skills</span>
+          </div>
+          <p class="card-tagline"><em>Make your agent work like a senior engineer.</em></p>
+          <p class="card-desc">Eight portable SKILL.md playbooks that push coding agents toward careful, deliberate engineering. One-command install across Claude Code, Codex, Antigravity, OpenCode, Copilot, and Cursor.</p>
+          <span class="card-meta"><span>agent skill</span><span class="sep">·</span><span class="card-stars" data-repo="senior-agent-skills">1 star</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/fuelgauge" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon">▤</div>
+            <span class="card-name">fuelgauge</span>
+          </div>
+          <p class="card-tagline"><em>A status line for Claude Code.</em></p>
+          <p class="card-desc">Cross-platform status line showing your folder, git branch, and color-coded progress bars for context window, 5-hour, and 7-day usage. Know how much runway you have without leaving the terminal.</p>
+          <span class="card-meta"><span>powershell</span><span class="sep">·</span><span class="card-stars" data-repo="fuelgauge">8 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/handcraft-html" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon">◻</div>
+            <span class="card-name">handcraft-html</span>
+          </div>
+          <p class="card-tagline"><em>HTML that reads like a person wrote it.</em></p>
+          <p class="card-desc">An agent skill for building HTML pages that don't look generated. Tuned for docs, references, runbooks, and portfolios, with light and dark themes and mobile handled by default.</p>
+          <span class="card-meta"><span>agent skill</span><span class="card-stars" data-repo="handcraft-html" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ABOUT -->
+    <section id="about" class="about" aria-labelledby="about-label">
+      <div class="about-text">
+        <p class="section-label" id="about-label">About</p>
+        <p>
+          I work on <strong>backend, platform, and AI security</strong>, out of the San Francisco Bay Area.
+          A large part of that has been <strong>anti-bot mitigation</strong>: telling automated traffic
+          apart from real users at scale, and doing it without breaking the experience for the humans.
+        </p>
+        <p>
+          That work shaped how I think about AI agents. Both problems come down to the same question:
+          how do you let automation do useful work while stopping it from doing damage? I believe
+          <strong>safety should be deterministic, not probabilistic.</strong> A rule that blocks a
+          dangerous action every time beats a model that usually declines. Most of my open-source work
+          comes from that conviction.
+        </p>
+        <p>
+          More on <a href="https://www.linkedin.com/in/adityaarakeri/" target="_blank" rel="noopener">LinkedIn</a>
+          and <a href="https://github.com/adityaarakeri" target="_blank" rel="noopener">GitHub</a>.
+        </p>
+      </div>
+      <div class="about-stack">
+        <p class="stack-title">Currently using</p>
+        <ul class="stack-list">
+          <li>Python: CLIs, security tooling, automation</li>
+          <li>JavaScript / Node: services and libraries</li>
+          <li>Go: platform and infrastructure work</li>
+          <li>Anti-bot mitigation: detection, rate limiting, fingerprinting</li>
+          <li>Cloud + CI/CD: pipelines, guardrails, deploys</li>
+          <li>Claude Code + MCP: agent hooks and servers</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- POSTS -->
+    <section id="posts" class="posts" aria-labelledby="posts-label">
+      <p class="section-label" id="posts-label">Writing</p>
+      <nav class="posts-list" aria-label="Blog posts">
+        <a href="https://thematrix.hashnode.dev/agents-write-the-code-now-somebody-still-has-to-understand-it" class="post-item" target="_blank" rel="noopener">
+          <span class="post-id">0004</span>
+          <span class="post-title">Agents write the code now. Somebody still has to understand it.</span>
+          <span class="post-date">2026-08 · 13 min <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span>
+        </a>
+
+        <a href="https://thematrix.hashnode.dev/i-got-tired-of-guessing-which-llms-would-run-on-my-machines-so-i-built-a-cli-to-tell-me" class="post-item" target="_blank" rel="noopener">
+          <span class="post-id">0003</span>
+          <span class="post-title">I got tired of guessing which LLMs would run on my machines. So I built a CLI to tell me.</span>
+          <span class="post-date">2026-04 · 11 min <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span>
+        </a>
+
+        <a href="https://thematrix.hashnode.dev/the-definitive-guide-to-prompt-engineering" class="post-item" target="_blank" rel="noopener">
+          <span class="post-id">0002</span>
+          <span class="post-title">The definitive guide to prompt engineering</span>
+          <span class="post-date">2026-04 · 45 min <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span>
+        </a>
+
+        <a href="https://thematrix.hashnode.dev/claude-code-has-a-plugin-problem" class="post-item" target="_blank" rel="noopener">
+          <span class="post-id">0001</span>
+          <span class="post-title">Your Claude Code has a plugin problem</span>
+          <span class="post-date">2026-04 · 17 min <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span>
+        </a>
+
+      </nav>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact" aria-labelledby="contact-label">
+      <h2 class="contact-heading" id="contact-label">Let's build something<br>worth building.</h2>
+      <p class="contact-sub">Open to collaborations, consulting, and conversations about hard problems.</p>
+      <div class="contact-links">
+        <a href="mailto:YOUR_EMAIL_HERE" class="contact-link primary">Email me</a>
+        <a href="https://github.com/adityaarakeri" class="contact-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="#" class="contact-link">Twitter / X</a>
+        <a href="https://www.linkedin.com/in/adityaarakeri/" class="contact-link" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer" role="contentinfo">
+      <span class="footer-copy">© 2026 Adi</span>
+      <span class="footer-right">Built with intent. No frameworks harmed.</span>
+    </footer>
+
+  </div><!-- /site-wrapper -->
+
+  <!-- CURSOR RING — trails the native cursor, never replaces it -->
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- MOBILE OVERLAY — lives at body level to escape stacking contexts -->
+  <div class="mobile-overlay" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <ul class="mobile-overlay-links">
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#posts">Writing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <p class="mobile-overlay-footer"><span>://</span> adi</p>
+  </div>
+
+  <script>
+    // ── Terminal hero: type the prompt once, then reveal the name ────
+    (function () {
+      var hero = document.querySelector('.hero');
+      var cmd  = document.querySelector('.term-cmd');
+      if (!hero || !cmd) return;
+      var text = cmd.getAttribute('data-cmd') || 'whoami';
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function finish() {
+        cmd.textContent = text;
+        hero.classList.add('is-typed');
+      }
+      if (reduce) { finish(); return; }
+
+      var i = 0;
+      // Small start delay so the page settles before the typing begins
+      setTimeout(function step() {
+        cmd.textContent = text.slice(0, ++i);
+        if (i < text.length) {
+          // Slight timing jitter reads as human rather than machine
+          setTimeout(step, 70 + Math.random() * 90);
+        } else {
+          // Hold on the completed command, then resolve to the name
+          setTimeout(function () { hero.classList.add('is-typed'); }, 420);
+        }
+      }, 500);
+    })();
+
+    // ── Grid spotlight: soft circle of brighter grid that follows the pointer ──
+    (function () {
+      var spot = document.querySelector('.bg-spotlight');
+      if (!spot || !window.matchMedia('(hover: hover)').matches) return;
+      var tx = -1000, ty = -1000, x = -1000, y = -1000;
+      document.addEventListener('pointermove', function (e) {
+        tx = e.clientX; ty = e.clientY;
+      }, { passive: true });
+      document.addEventListener('pointerleave', function () {
+        tx = -1000; ty = -1000;
+      });
+      (function loop() {
+        // Ease toward the pointer so the light has a little weight to it
+        x += (tx - x) * 0.18;
+        y += (ty - y) * 0.18;
+        spot.style.setProperty('--sx', x.toFixed(1) + 'px');
+        spot.style.setProperty('--sy', y.toFixed(1) + 'px');
+        requestAnimationFrame(loop);
+      })();
+    })();
+
+    // ── Cursor ring: trails the pointer, grows over interactive elements ──
+    (function () {
+      var ring = document.querySelector('.cursor-ring');
+      if (!ring) return;
+      if (!window.matchMedia('(hover: hover)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var tx = -100, ty = -100, x = -100, y = -100, shown = false;
+
+      document.addEventListener('pointermove', function (e) {
+        tx = e.clientX; ty = e.clientY;
+        if (!shown) { shown = true; ring.classList.add('is-visible'); }
+      }, { passive: true });
+
+      // Hide when the pointer leaves the window, show again on return
+      document.addEventListener('mouseleave', function () { ring.classList.remove('is-visible'); shown = false; });
+
+      // Grow over anything clickable. Uses event delegation so it
+      // works for elements added later too.
+      var HOVER = 'a, button, [role="button"], input, textarea, select, label';
+      document.addEventListener('pointerover', function (e) {
+        if (e.target.closest && e.target.closest(HOVER)) ring.classList.add('is-hover');
+      });
+      document.addEventListener('pointerout', function (e) {
+        if (e.target.closest && e.target.closest(HOVER)) ring.classList.remove('is-hover');
+      });
+
+      document.addEventListener('pointerdown', function () { ring.classList.add('is-down'); });
+      document.addEventListener('pointerup',   function () { ring.classList.remove('is-down'); });
+
+      (function loop() {
+        // Slight lag gives the ring a sense of weight without feeling slow.
+        // 0.22 is the sweet spot: any lower reads as laggy, any higher stops feeling like a trail.
+        x += (tx - x) * 0.22;
+        y += (ty - y) * 0.22;
+        ring.style.transform = 'translate(' + (x - 0).toFixed(1) + 'px, ' + (y - 0).toFixed(1) + 'px) translate(-50%, -50%)';
+        requestAnimationFrame(loop);
+      })();
+    })();
+
+    // ── Live star counts: refresh the static numbers from GitHub, fail silently ──
+    (function () {
+      var els = document.querySelectorAll('.card-stars[data-repo]');
+      if (!els.length || !window.fetch) return;
+      els.forEach(function (el) {
+        fetch('https://api.github.com/repos/adityaarakeri/' + el.getAttribute('data-repo'))
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (d) {
+            if (!d || typeof d.stargazers_count !== 'number') return;
+            var n = d.stargazers_count;
+            if (n < 1) return;               // keep zero-star repos quiet
+            el.textContent = n + (n === 1 ? ' star' : ' stars');
+            if (el.hasAttribute('hidden')) {
+              el.removeAttribute('hidden');
+              var sep = document.createElement('span');
+              sep.className = 'sep'; sep.textContent = '·';
+              el.parentNode.insertBefore(sep, el);
+            }
+          })
+          .catch(function () { /* offline or rate limited: static text stays */ });
+      });
+    })();
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // ── Burger menu ──────────────────────────────────────────────
+      var burger       = document.querySelector('.nav-burger');
+      var overlay      = document.querySelector('.mobile-overlay');
+      var overlayLinks = document.querySelectorAll('.mobile-overlay-links a');
+
+      if (!burger || !overlay) return;
+
+      function openMenu() {
+        burger.classList.add('is-open');
+        overlay.classList.add('is-open');
+        burger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        burger.classList.remove('is-open');
+        overlay.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      burger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        burger.classList.contains('is-open') ? closeMenu() : openMenu();
+      });
+
+      overlayLinks.forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+    });
+
+    // ── Doodle repel — glyphs shy away from the pointer ──────────
+    (function () {
+      var doodles = Array.prototype.slice.call(document.querySelectorAll('.doodle'));
+      if (!doodles.length) return;
+
+      var REPEL_RADIUS   = 160;  // px — how close before they react
+      var REPEL_STRENGTH = 90;   // px — max distance they flee
+      var EASE           = 0.10; // lerp factor — lower = lazier, floatier
+
+      // Per-doodle state: current offset + target offset
+      var state = doodles.map(function (el) {
+        return { el: el, x: 0, y: 0, tx: 0, ty: 0 };
+      });
+
+      var pointer = { x: -9999, y: -9999 };
+
+      function onMove(x, y) {
+        pointer.x = x;
+        pointer.y = y;
+      }
+
+      document.addEventListener('pointermove', function (e) {
+        onMove(e.clientX, e.clientY);
+      }, { passive: true });
+
+      // Touch: react on both touchstart and touchmove so a tap also scatters them
+      document.addEventListener('touchstart', function (e) {
+        if (e.touches.length) onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      document.addEventListener('touchmove', function (e) {
+        if (e.touches.length) onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+
+      // On finger lift, hold the repel point for a beat so a quick tap
+      // still produces a visible flee, THEN release so doodles drift home.
+      // Without this delay an instant tap resets before anything moves.
+      document.addEventListener('touchend', function () {
+        setTimeout(function () {
+          pointer.x = -9999;
+          pointer.y = -9999;
+        }, 450);
+      }, { passive: true });
+
+      function tick() {
+        for (var i = 0; i < state.length; i++) {
+          var s    = state[i];
+          var rect = s.el.getBoundingClientRect();
+          var cx   = rect.left + rect.width  / 2;
+          var cy   = rect.top  + rect.height / 2;
+
+          var dx   = cx - pointer.x;
+          var dy   = cy - pointer.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < REPEL_RADIUS && dist > 0.001) {
+            // Push directly away, stronger the closer you get
+            var force = (1 - dist / REPEL_RADIUS) * REPEL_STRENGTH;
+            s.tx = (dx / dist) * force;
+            s.ty = (dy / dist) * force;
+          } else {
+            // Out of range — drift back to rest
+            s.tx = 0;
+            s.ty = 0;
+          }
+
+          // Lerp toward target for a soft, springy feel
+          s.x += (s.tx - s.x) * EASE;
+          s.y += (s.ty - s.y) * EASE;
+
+          // Snap tiny residuals to zero to let the browser idle
+          if (Math.abs(s.x) < 0.05) s.x = 0;
+          if (Math.abs(s.y) < 0.05) s.y = 0;
+
+          // Inline transform on the outer element — JS owns this exclusively.
+          // The drift animation lives on the inner svg, so they never clash.
+          s.el.style.transform = 'translate(' + s.x.toFixed(2) + 'px, ' + s.y.toFixed(2) + 'px)';
+        }
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    })();
+
+    // ── Scroll reveals ───────────────────────────────────────────
+    // Intersection Observer for scroll reveals on below-fold sections
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('is-in');
+        observer.unobserve(el);
+        // Once the reveal finishes, drop both classes so no reveal rule
+        // lingers to fight hover/active transforms later.
+        el.addEventListener('transitionend', function done(e) {
+          if (e.propertyName !== 'transform') return;
+          el.classList.remove('reveal-on-scroll', 'is-in');
+          el.removeEventListener('transitionend', done);
+        });
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.project-card, .post-item, .about-text, .about-stack, .contact-heading, .contact-sub, .contact-links').forEach(function (el) {
+      el.classList.add('reveal-on-scroll');
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
