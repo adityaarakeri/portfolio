@@ -3,12 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>:// adi</title>
+  <title>Adi — Backend &amp; AI Security Engineer</title>
+  <meta name="description" content="Backend, platform, and AI security engineer. Deterministic guardrails for coding agents, anti-bot mitigation, and open-source tooling for local LLM workflows." />
+  <meta name="theme-color" content="#131411" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23131411'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='28' font-weight='bold' fill='%237ecb8f' text-anchor='middle'%3E://%3C/text%3E%3C/svg%3E" />
+  <link rel="canonical" href="https://adityaarakeri.me/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Adi — Backend &amp; AI Security Engineer" />
+  <meta property="og:url" content="https://adityaarakeri.me/" />
+  <meta property="og:title" content="Adi — Backend &amp; AI Security Engineer" />
+  <meta property="og:description" content="Deterministic guardrails for coding agents, anti-bot mitigation, and open-source tooling for local LLM workflows." />
+  <meta property="og:image" content="https://adityaarakeri.me/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Adi — Backend and AI Security Engineer" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Adi — Backend &amp; AI Security Engineer" />
+  <meta name="twitter:description" content="Deterministic guardrails for coding agents, anti-bot mitigation, and open-source tooling for local LLM workflows." />
+  <meta name="twitter:image" content="https://adityaarakeri.me/og-image.png" />
+  <meta name="twitter:image:alt" content="Adi — Backend and AI Security Engineer" />
   <!-- Runs before first paint so hero elements start hidden with no flash -->
   <script>document.documentElement.classList.add('js');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     /* ============================================================
        DESIGN TOKENS
@@ -484,9 +502,20 @@
 
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 16px;
     }
+
+    /* Group label inside Projects: Tools / Skills / Guardrails */
+    .group-title {
+      font-size: var(--size-label);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin: 0 0 16px;
+    }
+    .group-title::before { content: '→'; color: var(--accent); margin-right: 8px; }
+    .projects-grid + .group-title { margin-top: 32px; }
 
     /* One primary signal (dashed -> solid, in accent) and one secondary
        (the arrow). Nothing moves the box. Focus mirrors hover exactly. */
@@ -550,6 +579,16 @@
       font-size: 1rem;
       background: rgba(126,203,143,0.06);
       flex-shrink: 0;
+    }
+    /* Same stroke language as the background doodles */
+    .card-icon svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+      stroke: var(--accent);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
     .card-name {
       font-size: 1rem;
@@ -821,6 +860,13 @@
     .reveal-4 { animation-delay: 0.35s; }
     .reveal-5 { animation-delay: 0.45s; }
     .reveal-6 { animation-delay: 0.55s; }
+
+    /* Reduced motion: reveals appear in place, scrolling jumps normally */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { animation: none; }
+      .js .reveal-on-scroll { transition: none; }
+    }
 
     /* ============================================================
        CURSOR RING
@@ -1126,51 +1172,22 @@
     <!-- PROJECTS -->
     <section id="projects" class="projects" aria-labelledby="projects-label">
       <p class="section-label reveal reveal-1" id="projects-label">Projects</p>
+      <p class="group-title">Tools</p>
       <div class="projects-grid">
 
         <a href="https://github.com/adityaarakeri/llmscan" class="project-card" target="_blank" rel="noopener">
           <div class="card-header">
-            <div class="card-icon">◈</div>
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="7" y="7" width="10" height="10" rx="2"/><rect x="10.5" y="10.5" width="3" height="3"/><line x1="9" y1="7" x2="9" y2="4"/><line x1="15" y1="7" x2="15" y2="4"/><line x1="9" y1="17" x2="9" y2="20"/><line x1="15" y1="17" x2="15" y2="20"/><line x1="7" y1="9" x2="4" y2="9"/><line x1="7" y1="15" x2="4" y2="15"/><line x1="17" y1="9" x2="20" y2="9"/><line x1="17" y1="15" x2="20" y2="15"/></svg></div>
             <span class="card-name">llmscan</span>
           </div>
           <p class="card-tagline"><em>Know what your machine can run.</em></p>
           <p class="card-desc">A fast CLI that inspects your hardware and reports which local LLMs will actually run on it, before you download 40GB to find out. Python, installable via Homebrew.</p>
-          <span class="card-meta"><span>python</span><span class="sep">·</span><span class="card-stars" data-repo="llmscan">24 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-        <a href="https://github.com/adityaarakeri/claude-on-a-leash" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon">⬡</div>
-            <span class="card-name">claude-on-a-leash</span>
-          </div>
-          <p class="card-tagline"><em>Deterministic guardrails for coding agents.</em></p>
-          <p class="card-desc">Six hooks for Claude Code that hard-block remote code execution, credential exfiltration, SSRF, and prompt injection before a command ever runs. Ships with an MCP server so any other agent gets the same protection.</p>
-          <span class="card-meta"><span>shell</span><span class="sep">·</span><span class="card-stars" data-repo="claude-on-a-leash">5 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-        <a href="https://github.com/adityaarakeri/gitatlas" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon">◎</div>
-            <span class="card-name">gitatlas</span>
-          </div>
-          <p class="card-tagline"><em>A map of your whole codebase in one file.</em></p>
-          <p class="card-desc">Generates a self-contained, browsable atlas of a multi-repo codebase as a single HTML file. Includes an MCP server and token-budgeted briefs so coding agents get the right context without reading everything.</p>
-          <span class="card-meta"><span>typescript</span><span class="card-stars" data-repo="gitatlas" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-        <a href="https://github.com/adityaarakeri/senior-agent-skills" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon">▣</div>
-            <span class="card-name">senior-agent-skills</span>
-          </div>
-          <p class="card-tagline"><em>Make your agent work like a senior engineer.</em></p>
-          <p class="card-desc">Eight portable SKILL.md playbooks that push coding agents toward careful, deliberate engineering. One-command install across Claude Code, Codex, Antigravity, OpenCode, Copilot, and Cursor.</p>
-          <span class="card-meta"><span>agent skill</span><span class="sep">·</span><span class="card-stars" data-repo="senior-agent-skills">1 star</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+          <span class="card-meta"><span>python</span><span class="sep">·</span><span class="card-stars" data-repo="llmscan">26 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
         </a>
 
         <a href="https://github.com/adityaarakeri/fuelgauge" class="project-card" target="_blank" rel="noopener">
           <div class="card-header">
-            <div class="card-icon">▤</div>
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 17 A 8 8 0 1 1 19 17"/><line x1="12" y1="13" x2="16.8" y2="8.2"/><circle cx="12" cy="13" r="1.5"/></svg></div>
             <span class="card-name">fuelgauge</span>
           </div>
           <p class="card-tagline"><em>A status line for Claude Code.</em></p>
@@ -1178,14 +1195,54 @@
           <span class="card-meta"><span>powershell</span><span class="sep">·</span><span class="card-stars" data-repo="fuelgauge">8 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
         </a>
 
+        <a href="https://github.com/adityaarakeri/gitatlas" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="5.5" r="2.5"/><circle cx="5.5" cy="18" r="2.5"/><circle cx="18.5" cy="18" r="2.5"/><line x1="10.9" y1="7.7" x2="6.7" y2="16.2"/><line x1="13.1" y1="7.7" x2="17.3" y2="16.2"/></svg></div>
+            <span class="card-name">gitatlas</span>
+          </div>
+          <p class="card-tagline"><em>A map of your whole codebase in one file.</em></p>
+          <p class="card-desc">Generates a self-contained, browsable atlas of a multi-repo codebase as a single HTML file. Includes an MCP server and token-budgeted briefs so coding agents get the right context without reading everything.</p>
+          <span class="card-meta"><span>typescript</span><span class="card-stars" data-repo="gitatlas" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+      </div>
+
+      <p class="group-title">Skills</p>
+      <div class="projects-grid">
+
+        <a href="https://github.com/adityaarakeri/senior-agent-skills" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 6 C10 4.5 7 4.5 4 5.5 V18.5 C7 17.5 10 17.5 12 19 C14 17.5 17 17.5 20 18.5 V5.5 C17 4.5 14 4.5 12 6 Z"/><line x1="12" y1="6" x2="12" y2="19"/></svg></div>
+            <span class="card-name">senior-agent-skills</span>
+          </div>
+          <p class="card-tagline"><em>Make your agent work like a senior engineer.</em></p>
+          <p class="card-desc">Eight portable SKILL.md playbooks that push coding agents toward careful, deliberate engineering. One-command install across Claude Code, Codex, Antigravity, OpenCode, Copilot, and Cursor.</p>
+          <span class="card-meta"><span>agent skill</span><span class="sep">·</span><span class="card-stars" data-repo="senior-agent-skills">1 star</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
         <a href="https://github.com/adityaarakeri/handcraft-html" class="project-card" target="_blank" rel="noopener">
           <div class="card-header">
-            <div class="card-icon">◻</div>
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><polyline points="8 6 3.5 12 8 18"/><polyline points="16 6 20.5 12 16 18"/><line x1="13.5" y1="5" x2="10.5" y2="19"/></svg></div>
             <span class="card-name">handcraft-html</span>
           </div>
           <p class="card-tagline"><em>HTML that reads like a person wrote it.</em></p>
           <p class="card-desc">An agent skill for building HTML pages that don't look generated. Tuned for docs, references, runbooks, and portfolios, with light and dark themes and mobile handled by default.</p>
           <span class="card-meta"><span>agent skill</span><span class="card-stars" data-repo="handcraft-html" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+      </div>
+
+      <p class="group-title">Guardrails</p>
+      <div class="projects-grid">
+
+        <a href="https://github.com/adityaarakeri/claude-on-a-leash" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 3 L19 6 V11 C19 15.5 16.2 18.8 12 20.5 C7.8 18.8 5 15.5 5 11 V6 Z"/><polyline points="9 11.5 11.2 13.7 15.2 9.5"/></svg></div>
+            <span class="card-name">claude-on-a-leash</span>
+          </div>
+          <p class="card-tagline"><em>Deterministic guardrails for coding agents.</em></p>
+          <p class="card-desc">Six hooks for Claude Code that hard-block remote code execution, credential exfiltration, SSRF, and prompt injection before a command ever runs. Ships with an MCP server so any other agent gets the same protection.</p>
+          <span class="card-meta"><span>shell</span><span class="sep">·</span><span class="card-stars" data-repo="claude-on-a-leash">5 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
         </a>
 
       </div>
@@ -1269,7 +1326,7 @@
       <div class="contact-links">
         <a href="mailto:aditya005@gmail.com" class="contact-link primary">Email me</a>
         <a href="https://github.com/adityaarakeri" class="contact-link" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://x.com/aditya005" class="contact-link">Twitter / X</a>
+        <a href="https://x.com/aditya005" class="contact-link" target="_blank" rel="noopener">Twitter / X</a>
         <a href="https://www.linkedin.com/in/adityaarakeri/" class="contact-link" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </section>
@@ -1325,25 +1382,59 @@
       }, 500);
     })();
 
+    // ── Shared pointer state + one rAF loop for all pointer effects ──
+    // A single pointermove listener and a single animation loop drive the
+    // spotlight, cursor ring, and doodle repel. Updaters no-op when settled
+    // so the browser actually idles instead of repainting every frame.
+    var FX = (function () {
+      var pointer = { x: -9999, y: -9999 };
+      document.addEventListener('pointermove', function (e) {
+        pointer.x = e.clientX; pointer.y = e.clientY;
+      }, { passive: true });
+      // Pointer left the window: park it off-page so effects release
+      document.addEventListener('pointerleave', function () {
+        pointer.x = -9999; pointer.y = -9999;
+      });
+      // Touch: react on both touchstart and touchmove so a tap also registers
+      document.addEventListener('touchstart', function (e) {
+        if (e.touches.length) { pointer.x = e.touches[0].clientX; pointer.y = e.touches[0].clientY; }
+      }, { passive: true });
+      document.addEventListener('touchmove', function (e) {
+        if (e.touches.length) { pointer.x = e.touches[0].clientX; pointer.y = e.touches[0].clientY; }
+      }, { passive: true });
+      // On finger lift, hold the repel point for a beat so a quick tap
+      // still produces a visible flee, THEN release so doodles drift home.
+      document.addEventListener('touchend', function () {
+        setTimeout(function () { pointer.x = -9999; pointer.y = -9999; }, 450);
+      }, { passive: true });
+
+      var updaters = [];
+      (function loop() {
+        for (var i = 0; i < updaters.length; i++) updaters[i]();
+        requestAnimationFrame(loop);
+      })();
+
+      return {
+        pointer: pointer,
+        add: function (fn) { updaters.push(fn); }
+      };
+    })();
+
     // ── Grid spotlight: soft circle of brighter grid that follows the pointer ──
     (function () {
       var spot = document.querySelector('.bg-spotlight');
       if (!spot || !window.matchMedia('(hover: hover)').matches) return;
-      var tx = -1000, ty = -1000, x = -1000, y = -1000;
-      document.addEventListener('pointermove', function (e) {
-        tx = e.clientX; ty = e.clientY;
-      }, { passive: true });
-      document.addEventListener('pointerleave', function () {
-        tx = -1000; ty = -1000;
-      });
-      (function loop() {
+      var x = -1000, y = -1000, last = '';
+      FX.add(function () {
         // Ease toward the pointer so the light has a little weight to it
-        x += (tx - x) * 0.18;
-        y += (ty - y) * 0.18;
+        x += (FX.pointer.x - x) * 0.18;
+        y += (FX.pointer.y - y) * 0.18;
+        var next = x.toFixed(1) + ',' + y.toFixed(1);
+        if (next === last) return;
+        last = next;
         spot.style.setProperty('--sx', x.toFixed(1) + 'px');
         spot.style.setProperty('--sy', y.toFixed(1) + 'px');
-        requestAnimationFrame(loop);
-      })();
+      });
     })();
 
     // ── Cursor ring: trails the pointer, grows over interactive elements ──
@@ -1353,15 +1444,7 @@
       if (!window.matchMedia('(hover: hover)').matches) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      var tx = -100, ty = -100, x = -100, y = -100, shown = false;
-
-      document.addEventListener('pointermove', function (e) {
-        tx = e.clientX; ty = e.clientY;
-        if (!shown) { shown = true; ring.classList.add('is-visible'); }
-      }, { passive: true });
-
-      // Hide when the pointer leaves the window, show again on return
-      document.addEventListener('mouseleave', function () { ring.classList.remove('is-visible'); shown = false; });
+      var x = -100, y = -100, shown = false, last = '';
 
       // Grow over anything clickable. Uses event delegation so it
       // works for elements added later too.
@@ -1376,27 +1459,39 @@
       document.addEventListener('pointerdown', function () { ring.classList.add('is-down'); });
       document.addEventListener('pointerup',   function () { ring.classList.remove('is-down'); });
 
-      (function loop() {
+      FX.add(function () {
+        // Hide when the pointer leaves the window, show again on return
+        if (FX.pointer.x === -9999) {
+          if (shown) { shown = false; ring.classList.remove('is-visible'); }
+        } else if (!shown) {
+          shown = true; ring.classList.add('is-visible');
+        }
         // Slight lag gives the ring a sense of weight without feeling slow.
         // 0.22 is the sweet spot: any lower reads as laggy, any higher stops feeling like a trail.
-        x += (tx - x) * 0.22;
-        y += (ty - y) * 0.22;
-        ring.style.transform = 'translate(' + (x - 0).toFixed(1) + 'px, ' + (y - 0).toFixed(1) + 'px) translate(-50%, -50%)';
-        requestAnimationFrame(loop);
-      })();
+        x += (FX.pointer.x - x) * 0.22;
+        y += (FX.pointer.y - y) * 0.22;
+        // Off-screen and invisible: stop writing transforms
+        if (!shown && x < -50) return;
+        var next = x.toFixed(1) + ',' + y.toFixed(1);
+        if (next === last) return;
+        last = next;
+        ring.style.transform = 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px) translate(-50%, -50%)';
+      });
     })();
 
-    // ── Live star counts: refresh the static numbers from GitHub, fail silently ──
+    // ── Live star counts: one API call for all repos, refresh the static numbers ──
     (function () {
       var els = document.querySelectorAll('.card-stars[data-repo]');
       if (!els.length || !window.fetch) return;
-      els.forEach(function (el) {
-        fetch('https://api.github.com/repos/adityaarakeri/' + el.getAttribute('data-repo'))
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (d) {
-            if (!d || typeof d.stargazers_count !== 'number') return;
-            var n = d.stargazers_count;
-            if (n < 1) return;               // keep zero-star repos quiet
+      fetch('https://api.github.com/users/adityaarakeri/repos?per_page=100')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (repos) {
+          if (!repos || !repos.length) return;
+          var stars = {};
+          repos.forEach(function (repo) { stars[repo.name] = repo.stargazers_count; });
+          els.forEach(function (el) {
+            var n = stars[el.getAttribute('data-repo')];
+            if (typeof n !== 'number' || n < 1) return;   // keep zero-star repos quiet
             el.textContent = n + (n === 1 ? ' star' : ' stars');
             if (el.hasAttribute('hidden')) {
               el.removeAttribute('hidden');
@@ -1404,9 +1499,9 @@
               sep.className = 'sep'; sep.textContent = '·';
               el.parentNode.insertBefore(sep, el);
             }
-          })
-          .catch(function () { /* offline or rate limited: static text stays */ });
-      });
+          });
+        })
+        .catch(function () { /* offline or rate limited: static text stays */ });
     })();
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1418,11 +1513,17 @@
 
       if (!burger || !overlay) return;
 
+      var menuOpener = null;
+
       function openMenu() {
         burger.classList.add('is-open');
         overlay.classList.add('is-open');
         burger.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
+        // Move focus into the dialog so keyboard/SR users land inside it
+        menuOpener = document.activeElement;
+        var first = overlay.querySelector('a, button');
+        if (first) first.focus();
       }
 
       function closeMenu() {
@@ -1430,6 +1531,9 @@
         overlay.classList.remove('is-open');
         burger.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        // Hand focus back to whatever opened the menu
+        if (menuOpener && menuOpener.focus) menuOpener.focus();
+        menuOpener = null;
       }
 
       burger.addEventListener('click', function (e) {
@@ -1442,7 +1546,21 @@
       });
 
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeMenu();
+        if (!overlay.classList.contains('is-open')) return;
+        if (e.key === 'Escape') { closeMenu(); return; }
+        // Keep Tab cycling inside the open dialog
+        if (e.key !== 'Tab') return;
+        var focusables = overlay.querySelectorAll('a');
+        if (!focusables.length) return;
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       });
     });
 
@@ -1460,44 +1578,24 @@
         return { el: el, x: 0, y: 0, tx: 0, ty: 0 };
       });
 
-      var pointer = { x: -9999, y: -9999 };
+      // All offsets at rest and the pointer hasn't moved since: skip
+      // the whole body, including the getBoundingClientRect reads
+      var settled = true, lastX = -9999, lastY = -9999;
 
-      function onMove(x, y) {
-        pointer.x = x;
-        pointer.y = y;
-      }
+      FX.add(function () {
+        if (settled && FX.pointer.x === lastX && FX.pointer.y === lastY) return;
+        lastX = FX.pointer.x;
+        lastY = FX.pointer.y;
 
-      document.addEventListener('pointermove', function (e) {
-        onMove(e.clientX, e.clientY);
-      }, { passive: true });
-
-      // Touch: react on both touchstart and touchmove so a tap also scatters them
-      document.addEventListener('touchstart', function (e) {
-        if (e.touches.length) onMove(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
-      document.addEventListener('touchmove', function (e) {
-        if (e.touches.length) onMove(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
-
-      // On finger lift, hold the repel point for a beat so a quick tap
-      // still produces a visible flee, THEN release so doodles drift home.
-      // Without this delay an instant tap resets before anything moves.
-      document.addEventListener('touchend', function () {
-        setTimeout(function () {
-          pointer.x = -9999;
-          pointer.y = -9999;
-        }, 450);
-      }, { passive: true });
-
-      function tick() {
+        var allSettled = true;
         for (var i = 0; i < state.length; i++) {
           var s    = state[i];
           var rect = s.el.getBoundingClientRect();
           var cx   = rect.left + rect.width  / 2;
           var cy   = rect.top  + rect.height / 2;
 
-          var dx   = cx - pointer.x;
-          var dy   = cy - pointer.y;
+          var dx   = cx - FX.pointer.x;
+          var dy   = cy - FX.pointer.y;
           var dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < REPEL_RADIUS && dist > 0.001) {
@@ -1519,14 +1617,16 @@
           if (Math.abs(s.x) < 0.05) s.x = 0;
           if (Math.abs(s.y) < 0.05) s.y = 0;
 
+          if (s.x !== 0 || s.y !== 0) allSettled = false;
+
           // Inline transform on the outer element — JS owns this exclusively.
           // The drift animation lives on the inner svg, so they never clash.
-          s.el.style.transform = 'translate(' + s.x.toFixed(2) + 'px, ' + s.y.toFixed(2) + 'px)';
+          s.el.style.transform = (s.x === 0 && s.y === 0)
+            ? ''
+            : 'translate(' + s.x.toFixed(2) + 'px, ' + s.y.toFixed(2) + 'px)';
         }
-        requestAnimationFrame(tick);
-      }
-
-      requestAnimationFrame(tick);
+        settled = allSettled;
+      });
     })();
 
     // ── Scroll reveals ───────────────────────────────────────────
@@ -1538,12 +1638,12 @@
         el.classList.add('is-in');
         observer.unobserve(el);
         // Once the reveal finishes, drop both classes so no reveal rule
-        // lingers to fight hover/active transforms later.
-        el.addEventListener('transitionend', function done(e) {
-          if (e.propertyName !== 'transform') return;
+        // lingers to fight hover/active transforms later. A timer rather
+        // than transitionend, because reduced-motion users get
+        // transition: none and would never fire the event.
+        setTimeout(function () {
           el.classList.remove('reveal-on-scroll', 'is-in');
-          el.removeEventListener('transitionend', done);
-        });
+        }, 700);
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
