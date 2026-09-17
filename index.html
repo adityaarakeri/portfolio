@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adi — Backend &amp; AI Security Engineer</title>
-  <meta name="description" content="Backend, platform, and AI security engineer. Deterministic guardrails for coding agents, anti-bot mitigation, and open-source tooling for local LLM workflows." />
+  <title>Aditya Arakeri | Engineer, Technical Leader &amp; Builder</title>
+  <meta name="description" content="Aditya Arakeri builds security systems, infrastructure, and AI developer tools, with experience in hands-on engineering, product ownership, and team leadership." />
   <meta name="theme-color" content="#131411" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23131411'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='28' font-weight='bold' fill='%237ecb8f' text-anchor='middle'%3E://%3C/text%3E%3C/svg%3E" />
   <link rel="canonical" href="https://adityaarakeri.me/" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Adi — Backend &amp; AI Security Engineer" />
+  <meta property="og:site_name" content="Aditya Arakeri" />
   <meta property="og:url" content="https://adityaarakeri.me/" />
-  <meta property="og:title" content="Adi — Backend &amp; AI Security Engineer" />
-  <meta property="og:description" content="Deterministic guardrails for coding agents, anti-bot mitigation, and open-source tooling for local LLM workflows." />
+  <meta property="og:title" content="Aditya Arakeri | Engineer, Technical Leader &amp; Builder" />
+  <meta property="og:description" content="Aditya Arakeri builds security systems, infrastructure, and AI developer tools, with experience in hands-on engineering, product ownership, and team leadership." />
   <meta property="og:image" content="https://adityaarakeri.me/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Adi — Backend and AI Security Engineer" />
+  <meta property="og:image:alt" content="Aditya Arakeri, Engineer, Technical Leader and Builder" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Adi — Backend &amp; AI Security Engineer" />
-  <meta name="twitter:description" content="Deterministic guardrails for coding agents, anti-bot mitigation, and open-source tooling for local LLM workflows." />
+  <meta name="twitter:title" content="Aditya Arakeri | Engineer, Technical Leader &amp; Builder" />
+  <meta name="twitter:description" content="Aditya Arakeri builds security systems, infrastructure, and AI developer tools, with experience in hands-on engineering, product ownership, and team leadership." />
   <meta name="twitter:image" content="https://adityaarakeri.me/og-image.png" />
-  <meta name="twitter:image:alt" content="Adi — Backend and AI Security Engineer" />
+  <meta name="twitter:image:alt" content="Aditya Arakeri, Engineer, Technical Leader and Builder" />
   <!-- Runs before first paint so hero elements start hidden with no flash -->
   <script>document.documentElement.classList.add('js');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -347,6 +347,7 @@
     .mobile-overlay.is-open .mobile-overlay-links li:nth-child(2) { opacity: 1; transform: none; transition-delay: 130ms; }
     .mobile-overlay.is-open .mobile-overlay-links li:nth-child(3) { opacity: 1; transform: none; transition-delay: 180ms; }
     .mobile-overlay.is-open .mobile-overlay-links li:nth-child(4) { opacity: 1; transform: none; transition-delay: 230ms; }
+    .mobile-overlay.is-open .mobile-overlay-links li:nth-child(5) { opacity: 1; transform: none; transition-delay: 280ms; }
     .mobile-overlay-links a {
       font-family: var(--font);
       font-size: clamp(1.8rem, 9vw, 2.6rem);
@@ -427,16 +428,20 @@
     /* Name, tagline and status wait for the prompt to finish, then
        cascade in. Only hidden when JS is present, so no-JS still works. */
     .js .hero:not(.is-typed) .hero-name,
+    .js .hero:not(.is-typed) .hero-headline,
     .js .hero:not(.is-typed) .hero-tagline,
-    .js .hero:not(.is-typed) .hero-status {
+    .js .hero:not(.is-typed) .hero-status,
+    .js .hero:not(.is-typed) .hero-links {
       opacity: 0;
       transform: translateY(14px);
     }
-    .hero-name, .hero-tagline, .hero-status {
+    .hero-name, .hero-headline, .hero-tagline, .hero-status, .hero-links {
       transition: opacity 600ms ease, transform 600ms ease;
     }
-    .hero.is-typed .hero-tagline { transition-delay: 140ms; }
+    .hero.is-typed .hero-headline { transition-delay: 100ms; }
+    .hero.is-typed .hero-tagline { transition-delay: 180ms; }
     .hero.is-typed .hero-status  { transition-delay: 280ms; }
+    .hero.is-typed .hero-links   { transition-delay: 380ms; }
 
     .hero-name {
       font-size: var(--size-display);
@@ -455,9 +460,27 @@
       font-size: 0.95rem;
       color: var(--text-secondary);
       max-width: 52ch;
-      margin: 0 auto 48px;
+      margin: 0 auto 32px;
       line-height: 1.75;
     }
+
+    .hero-headline {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .hero-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 36px;
+    }
+    /* Reuses .contact-link pill styling defined below */
 
     .hero-status {
       display: inline-flex;
@@ -905,6 +928,118 @@
     @media (prefers-reduced-motion: reduce) { .cursor-ring { display: none; } }
 
     /* ============================================================
+       EXPERIENCE — PRODUCTION CASE STUDY + CAREER TIMELINE
+    ============================================================ */
+    .experience { padding: 0 0 var(--space-section); }
+
+    .case {
+      background: var(--bg-card);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: clamp(24px, 4vw, 36px);
+      margin-bottom: 32px;
+    }
+
+    .case-title {
+      font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .case-sub {
+      font-size: var(--size-label);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .case-body p {
+      font-size: var(--size-body);
+      color: var(--text-secondary);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+    .case-body p:last-child { margin-bottom: 0; }
+
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 24px 0 20px;
+    }
+
+    .outcome {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      background: rgba(126,203,143,0.04);
+    }
+    .outcome strong {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .outcome span {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .case-foot {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    .case-foot a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--border-hover);
+      transition: border-color 200ms ease;
+    }
+    .case-foot a:hover { border-color: var(--accent); }
+
+    .timeline {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 4px;
+    }
+    .timeline-item {
+      border-left: 2px solid var(--border);
+      padding-left: 18px;
+      line-height: 1.7;
+    }
+    .timeline-role {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .timeline-role span {
+      font-weight: 400;
+      color: var(--text-dim);
+    }
+    .timeline-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .contact-resume {
+      font-size: var(--size-label);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 36px;
+    }
+    .contact-resume span { color: var(--accent); }
+
+    /* ============================================================
        FOCUS / A11Y
     ============================================================ */
     :focus-visible {
@@ -1138,7 +1273,8 @@
     <nav class="site-nav" role="navigation" aria-label="Main navigation">
       <a class="nav-logo" href="#"><span>://</span> adi</a>
       <ul class="nav-links">
-        <li><a href="#projects">Work</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#posts">Writing</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -1156,83 +1292,96 @@
         <span class="term-prompt">$</span><span class="term-cmd" data-cmd="whoami"></span><span class="term-cursor" aria-hidden="true"></span>
       </p>
       <h1 class="hero-name">
-        <em>Adi</em>
+        <em>Aditya Arakeri</em>
       </h1>
+      <p class="hero-headline">Engineer. Technical leader. Builder.</p>
       <p class="hero-tagline">
-        Backend, platform, and AI security engineer.
-        Years spent keeping bots out of production systems,
-        now building guardrails that keep AI agents in line.
+        I build security systems, infrastructure, and tools for AI agents.
+        My experience spans backend development, architecture, production
+        operations, and leading engineering teams at F5 and Shape Security.
+        I stay close to the code and take responsibility for how systems work
+        once they ship.
       </p>
       <div class="hero-status">
         <span class="status-dot"></span>
-        <span>Available for new projects</span>
+        <span>San Francisco Bay Area · Open to new opportunities</span>
+      </div>
+      <div class="hero-links">
+        <a href="#experience" class="contact-link">View experience</a>
+        <a href="#projects" class="contact-link">Explore projects</a>
+        <a href="#contact" class="contact-link primary">Get in touch</a>
       </div>
     </header>
 
+    <!-- EXPERIENCE -->
+    <section id="experience" class="experience" aria-labelledby="experience-label">
+      <p class="section-label reveal reveal-1" id="experience-label">Production engineering</p>
+      <div class="case">
+        <h2 class="case-title">Building and operating bot defense at scale</h2>
+        <p class="case-sub">F5 / Shape Security · Web application bot detection</p>
+        <div class="case-body">
+          <p>
+            At F5, I owned the web application bot detection product end to end,
+            leading architecture, development, testing, and deployment across AWS
+            and GCP. Earlier, as a Staff Software Engineer at Shape Security, I
+            designed and implemented backend features for the Anti-Bot Mitigation
+            Engine and built internal engineering tools.
+          </p>
+          <p>
+            As the scope grew, I led a global organization of 15+ people, including
+            three managers. I worked directly with customers to simplify configuration
+            and led improvements to deployment, testing, monitoring, and infrastructure cost.
+          </p>
+        </div>
+        <div class="outcome-grid">
+          <div class="outcome">
+            <strong>24 hours → 1.5 hours</strong>
+            <span>Reduced elapsed deployment time through CI/CD improvements.</span>
+          </div>
+          <div class="outcome">
+            <strong>15+ people, including three managers</strong>
+            <span>Built and led a global engineering organization.</span>
+          </div>
+          <div class="outcome">
+            <strong>Lower infrastructure spend</strong>
+            <span>Brought spend down across AWS and GCP, within a $20M infrastructure budget.</span>
+          </div>
+          <div class="outcome">
+            <strong>Simpler customer configuration</strong>
+            <span>Removed redundant options and focused on settings customers used most.</span>
+          </div>
+        </div>
+        <p class="case-foot">
+          <a href="https://www.f5.com/products/distributed-cloud-services/bot-defense#overview" target="_blank" rel="noopener">About F5 Bot Defense <span aria-hidden="true">↗</span></a><span class="sr-only">(opens in new tab)</span>
+        </p>
+      </div>
+      <p class="group-title">Career</p>
+      <ol class="timeline">
+        <li class="timeline-item">
+          <p class="timeline-role">F5 <span>· Senior Manager, Engineering · Apr 2021–Sep 2026</span></p>
+          <p class="timeline-desc">Product ownership, architecture, delivery, and engineering organization leadership.</p>
+        </li>
+        <li class="timeline-item">
+          <p class="timeline-role">Shape Security <span>· Manager, Engineering · Apr 2020–Apr 2021; Staff Software Engineer · Nov 2018–Apr 2020</span></p>
+          <p class="timeline-desc">Backend bot mitigation, cloud operations, APIs, and engineering tooling.</p>
+        </li>
+        <li class="timeline-item">
+          <p class="timeline-role">Apple <span>· Lead Software Development Engineer · May 2013–Nov 2018</span></p>
+          <p class="timeline-desc">Development, automation, CI/CD, and reliability improvements.</p>
+        </li>
+        <li class="timeline-item">
+          <p class="timeline-role">Infosys <span>· Software Engineer · Dec 2007–May 2013</span></p>
+          <p class="timeline-desc">Enterprise applications, business logic, and API testing.</p>
+        </li>
+      </ol>
+    </section>
+
+    <div class="section-divider"></div>
+
     <!-- PROJECTS -->
     <section id="projects" class="projects" aria-labelledby="projects-label">
-      <p class="section-label reveal reveal-1" id="projects-label">Projects</p>
-      <p class="group-title">Tools</p>
-      <div class="projects-grid">
-
-        <a href="https://github.com/adityaarakeri/llmscan" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="7" y="7" width="10" height="10" rx="2"/><rect x="10.5" y="10.5" width="3" height="3"/><line x1="9" y1="7" x2="9" y2="4"/><line x1="15" y1="7" x2="15" y2="4"/><line x1="9" y1="17" x2="9" y2="20"/><line x1="15" y1="17" x2="15" y2="20"/><line x1="7" y1="9" x2="4" y2="9"/><line x1="7" y1="15" x2="4" y2="15"/><line x1="17" y1="9" x2="20" y2="9"/><line x1="17" y1="15" x2="20" y2="15"/></svg></div>
-            <span class="card-name">llmscan</span>
-          </div>
-          <p class="card-tagline"><em>Know what your machine can run.</em></p>
-          <p class="card-desc">A fast CLI that inspects your hardware and reports which local LLMs will actually run on it, before you download 40GB to find out. Python, installable via Homebrew.</p>
-          <span class="card-meta"><span>python</span><span class="sep">·</span><span class="card-stars" data-repo="llmscan">26 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-        <a href="https://github.com/adityaarakeri/fuelgauge" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 17 A 8 8 0 1 1 19 17"/><line x1="12" y1="13" x2="16.8" y2="8.2"/><circle cx="12" cy="13" r="1.5"/></svg></div>
-            <span class="card-name">fuelgauge</span>
-          </div>
-          <p class="card-tagline"><em>A status line for Claude Code.</em></p>
-          <p class="card-desc">Cross-platform status line showing your folder, git branch, and color-coded progress bars for context window, 5-hour, and 7-day usage. Know how much runway you have without leaving the terminal.</p>
-          <span class="card-meta"><span>powershell</span><span class="sep">·</span><span class="card-stars" data-repo="fuelgauge">8 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-        <a href="https://github.com/adityaarakeri/gitatlas" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="5.5" r="2.5"/><circle cx="5.5" cy="18" r="2.5"/><circle cx="18.5" cy="18" r="2.5"/><line x1="10.9" y1="7.7" x2="6.7" y2="16.2"/><line x1="13.1" y1="7.7" x2="17.3" y2="16.2"/></svg></div>
-            <span class="card-name">gitatlas</span>
-          </div>
-          <p class="card-tagline"><em>A map of your whole codebase in one file.</em></p>
-          <p class="card-desc">Generates a self-contained, browsable atlas of a multi-repo codebase as a single HTML file. Includes an MCP server and token-budgeted briefs so coding agents get the right context without reading everything.</p>
-          <span class="card-meta"><span>typescript</span><span class="card-stars" data-repo="gitatlas" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-      </div>
-
-      <p class="group-title">Skills</p>
-      <div class="projects-grid">
-
-        <a href="https://github.com/adityaarakeri/senior-agent-skills" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 6 C10 4.5 7 4.5 4 5.5 V18.5 C7 17.5 10 17.5 12 19 C14 17.5 17 17.5 20 18.5 V5.5 C17 4.5 14 4.5 12 6 Z"/><line x1="12" y1="6" x2="12" y2="19"/></svg></div>
-            <span class="card-name">senior-agent-skills</span>
-          </div>
-          <p class="card-tagline"><em>Make your agent work like a senior engineer.</em></p>
-          <p class="card-desc">Eight portable SKILL.md playbooks that push coding agents toward careful, deliberate engineering. One-command install across Claude Code, Codex, Antigravity, OpenCode, Copilot, and Cursor.</p>
-          <span class="card-meta"><span>agent skill</span><span class="sep">·</span><span class="card-stars" data-repo="senior-agent-skills">1 star</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-        <a href="https://github.com/adityaarakeri/handcraft-html" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><polyline points="8 6 3.5 12 8 18"/><polyline points="16 6 20.5 12 16 18"/><line x1="13.5" y1="5" x2="10.5" y2="19"/></svg></div>
-            <span class="card-name">handcraft-html</span>
-          </div>
-          <p class="card-tagline"><em>HTML that reads like a person wrote it.</em></p>
-          <p class="card-desc">An agent skill for building HTML pages that don't look generated. Tuned for docs, references, runbooks, and portfolios, with light and dark themes and mobile handled by default.</p>
-          <span class="card-meta"><span>agent skill</span><span class="card-stars" data-repo="handcraft-html" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-      </div>
-
-      <p class="group-title">Guardrails</p>
+      <p class="section-label reveal reveal-1" id="projects-label">Selected open source</p>
+      <p class="group-title">Featured</p>
       <div class="projects-grid">
 
         <a href="https://github.com/adityaarakeri/claude-on-a-leash" class="project-card" target="_blank" rel="noopener">
@@ -1240,9 +1389,9 @@
             <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 3 L19 6 V11 C19 15.5 16.2 18.8 12 20.5 C7.8 18.8 5 15.5 5 11 V6 Z"/><polyline points="9 11.5 11.2 13.7 15.2 9.5"/></svg></div>
             <span class="card-name">claude-on-a-leash</span>
           </div>
-          <p class="card-tagline"><em>Deterministic guardrails for coding agents.</em></p>
-          <p class="card-desc">Six hooks for Claude Code that hard-block remote code execution, credential exfiltration, SSRF, and prompt injection before a command ever runs. Ships with an MCP server so any other agent gets the same protection.</p>
-          <span class="card-meta"><span>shell</span><span class="sep">·</span><span class="card-stars" data-repo="claude-on-a-leash">5 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+          <p class="card-tagline"><em>Blocks risky agent commands before they run.</em></p>
+          <p class="card-desc">Configurable checks around coding-agent commands, sensitive file access, and network requests, with audit logs for inspection. Includes Claude Code hooks and an advisory MCP validation server.</p>
+          <span class="card-meta"><span>shell</span><span class="sep">·</span><span>6 hooks + MCP</span><span class="sep">·</span><span class="card-stars" data-repo="claude-on-a-leash">5 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
         </a>
 
         <a href="https://github.com/adityaarakeri/codex-on-a-leash" class="project-card" target="_blank" rel="noopener">
@@ -1250,34 +1399,74 @@
             <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 3 L19 6 V11 C19 15.5 16.2 18.8 12 20.5 C7.8 18.8 5 15.5 5 11 V6 Z"/><polyline points="9 11.5 11.2 13.7 15.2 9.5"/></svg></div>
             <span class="card-name">codex-on-a-leash</span>
           </div>
-          <p class="card-tagline"><em>Deterministic guardrails for Codex.</em></p>
-          <p class="card-desc">Seven hooks for Codex that scan prompts, block destructive Bash before it runs, check file and MCP inputs for secrets, and audit every command. Codex-native, built around what Codex can actually intercept today.</p>
-          <span class="card-meta"><span>python</span><span class="card-stars" data-repo="codex-on-a-leash" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+          <p class="card-tagline"><em>Stops dangerous Codex commands, audits the rest.</em></p>
+          <p class="card-desc">Guardrail tooling for Codex, with checks for risky commands and sensitive inputs, plus auditing around supported agent actions.</p>
+          <span class="card-meta"><span>python</span><span class="sep">·</span><span>7 hooks</span><span class="card-stars" data-repo="codex-on-a-leash" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/gitatlas" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="5.5" r="2.5"/><circle cx="5.5" cy="18" r="2.5"/><circle cx="18.5" cy="18" r="2.5"/><line x1="10.9" y1="7.7" x2="6.7" y2="16.2"/><line x1="13.1" y1="7.7" x2="17.3" y2="16.2"/></svg></div>
+            <span class="card-name">gitatlas</span>
+          </div>
+          <p class="card-tagline"><em>One HTML file that maps a codebase to the function.</em></p>
+          <p class="card-desc">A browsable map of a codebase, with static analysis, architecture views, and context summaries sized for coding agents. Includes MCP tools for exploring repositories.</p>
+          <span class="card-meta"><span>typescript</span><span class="sep">·</span><span>21 languages</span><span class="card-stars" data-repo="gitatlas" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/llmscan" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="7" y="7" width="10" height="10" rx="2"/><rect x="10.5" y="10.5" width="3" height="3"/><line x1="9" y1="7" x2="9" y2="4"/><line x1="15" y1="7" x2="15" y2="4"/><line x1="9" y1="17" x2="9" y2="20"/><line x1="15" y1="17" x2="15" y2="20"/><line x1="7" y1="9" x2="4" y2="9"/><line x1="7" y1="15" x2="4" y2="15"/><line x1="17" y1="9" x2="20" y2="9"/><line x1="17" y1="15" x2="20" y2="15"/></svg></div>
+            <span class="card-name">llmscan</span>
+          </div>
+          <p class="card-tagline"><em>Tells you which local models your machine can run.</em></p>
+          <p class="card-desc">A Python CLI that inspects your hardware and estimates which local language models will fit, accounting for quantization and inference-backend memory requirements.</p>
+          <span class="card-meta"><span>python</span><span class="sep">·</span><span>on pypi</span><span class="sep">·</span><span class="card-stars" data-repo="llmscan">26 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
         </a>
 
       </div>
 
-      <p class="group-title">Extensions</p>
+      <p class="group-title">More projects</p>
       <div class="projects-grid">
+
+        <a href="https://github.com/adityaarakeri/senior-agent-skills" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 6 C10 4.5 7 4.5 4 5.5 V18.5 C7 17.5 10 17.5 12 19 C14 17.5 17 17.5 20 18.5 V5.5 C17 4.5 14 4.5 12 6 Z"/><line x1="12" y1="6" x2="12" y2="19"/></svg></div>
+            <span class="card-name">senior-agent-skills</span>
+          </div>
+          <p class="card-tagline"><em>Makes a coding agent plan, test, and verify before shipping.</em></p>
+          <p class="card-desc">Ten portable SKILL.md playbooks that push coding agents toward careful, deliberate engineering. One-command install across Claude Code, Codex, Antigravity, OpenCode, Copilot, and Cursor.</p>
+          <span class="card-meta"><span>agent skill</span><span class="sep">·</span><span>10 playbooks</span><span class="sep">·</span><span class="card-stars" data-repo="senior-agent-skills">1 star</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/handcraft-html" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><polyline points="8 6 3.5 12 8 18"/><polyline points="16 6 20.5 12 16 18"/><line x1="13.5" y1="5" x2="10.5" y2="19"/></svg></div>
+            <span class="card-name">handcraft-html</span>
+          </div>
+          <p class="card-tagline"><em>Builds HTML pages that do not read as generated.</em></p>
+          <p class="card-desc">An agent skill for building HTML pages that don't look generated. Tuned for docs, references, runbooks, and portfolios, with light and dark themes and mobile handled by default.</p>
+          <span class="card-meta"><span>agent skill</span><span class="sep">·</span><span>9 page types</span><span class="card-stars" data-repo="handcraft-html" hidden></span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
+
+        <a href="https://github.com/adityaarakeri/fuelgauge" class="project-card" target="_blank" rel="noopener">
+          <div class="card-header">
+            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 17 A 8 8 0 1 1 19 17"/><line x1="12" y1="13" x2="16.8" y2="8.2"/><circle cx="12" cy="13" r="1.5"/></svg></div>
+            <span class="card-name">fuelgauge</span>
+          </div>
+          <p class="card-tagline"><em>Shows your Claude Code runway before you hit the limit.</em></p>
+          <p class="card-desc">Cross-platform status line showing your folder, git branch, and color-coded progress bars for context window, 5-hour, and 7-day usage. Know how much runway you have without leaving the terminal.</p>
+          <span class="card-meta"><span>powershell</span><span class="sep">·</span><span>claude code plugin</span><span class="sep">·</span><span class="card-stars" data-repo="fuelgauge">8 stars</span><span class="sep">·</span><span class="go">github <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+        </a>
 
         <a href="https://chromewebstore.google.com/detail/dark-sites/kmagjnlcelcnpaindnfmokhhnohoedfc" class="project-card" target="_blank" rel="noopener">
           <div class="card-header">
             <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 13.5 A8 8 0 1 1 10.5 4 A6.8 6.8 0 0 0 20 13.5 Z"/><line x1="17" y1="4" x2="17" y2="6.5"/><line x1="20.5" y1="7.5" x2="19" y2="9"/></svg></div>
             <span class="card-name">dark-sites</span>
           </div>
-          <p class="card-tagline"><em>Dark mode, only where you want it.</em></p>
+          <p class="card-tagline"><em>Dark mode on the sites you choose, nowhere else.</em></p>
           <p class="card-desc">Per-site dark mode with a master switch and Alt+Shift+D shortcut. Asks for access only on sites you add, no account, no tracking, list syncs via the browser. Open source.</p>
-          <span class="card-meta"><span>chrome extension</span><span class="sep">·</span><span class="go">chrome web store <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
-        </a>
-
-        <a href="https://chromewebstore.google.com/detail/wordle-buddy/phnnhfajfmajfifclnlbbhfjiccodadg" class="project-card" target="_blank" rel="noopener">
-          <div class="card-header">
-            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="4" y1="9.3" x2="20" y2="9.3"/><line x1="4" y1="14.6" x2="20" y2="14.6"/><line x1="9.3" y1="4" x2="9.3" y2="20"/><line x1="14.6" y1="4" x2="14.6" y2="20"/></svg></div>
-            <span class="card-name">wordle-buddy</span>
-          </div>
-          <p class="card-tagline"><em>Word suggestions for Wordle.</em></p>
-          <p class="card-desc">A fun helper that suggests Wordle words while you play. Lightweight, no tracking, no account.</p>
-          <span class="card-meta"><span>chrome extension</span><span class="sep">·</span><span class="go">chrome web store <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
+          <span class="card-meta"><span>chrome extension</span><span class="sep">·</span><span>manifest v3</span><span class="sep">·</span><span class="go">chrome web store <span class="arrow" aria-hidden="true">↗</span></span><span class="sr-only">(opens in new tab)</span></span>
         </a>
 
       </div>
@@ -1290,16 +1479,25 @@
       <div class="about-text">
         <p class="section-label" id="about-label">About</p>
         <p>
-          I work on <strong>backend, platform, and AI security</strong>, out of the San Francisco Bay Area.
-          A large part of that has been <strong>anti-bot mitigation</strong>: telling automated traffic
-          apart from real users at scale, and doing it without breaking the experience for the humans.
+          I'm an engineer based in the San Francisco Bay Area, with 18+ years
+          across backend systems, cloud infrastructure, security, and engineering
+          leadership.
         </p>
         <p>
-          That work shaped how I think about AI agents. Both problems come down to the same question:
-          how do you let automation do useful work while stopping it from doing damage? I believe
-          <strong>safety should be deterministic, not probabilistic.</strong> A rule that blocks a
-          dangerous action every time beats a model that usually declines. Most of my open-source work
-          comes from that conviction.
+          My work has ranged from implementing bot-mitigation services and internal
+          tools to owning a production product and leading engineers and managers.
+          I care about understanding failure modes, making sound technical decisions,
+          and following through after a system ships.
+        </p>
+        <p>
+          These days, I'm applying that experience to coding-agent guardrails,
+          developer tools, and local AI. I build and use the tools myself, then
+          work through the limitations I find.
+        </p>
+        <p>
+          I build explicit controls around what coding agents can execute, access,
+          and change. My focus is enforceable permissions, checks before execution,
+          and audit trails that make agent behavior easier to inspect.
         </p>
         <p>
           More on <a href="https://www.linkedin.com/in/adityaarakeri/" target="_blank" rel="noopener">LinkedIn</a>
@@ -1307,14 +1505,12 @@
         </p>
       </div>
       <div class="about-stack">
-        <p class="stack-title">Currently using</p>
+        <p class="stack-title">Technical scope</p>
         <ul class="stack-list">
-          <li>Python: CLIs, security tooling, automation</li>
-          <li>JavaScript / Node: services and libraries</li>
-          <li>Go: platform and infrastructure work</li>
-          <li>Anti-bot mitigation: detection, rate limiting, fingerprinting</li>
-          <li>Cloud + CI/CD: pipelines, guardrails, deploys</li>
-          <li>Claude Code + MCP: agent hooks and servers</li>
+          <li>Systems: backend services, APIs, bot mitigation, production operations</li>
+          <li>Infrastructure: AWS, GCP, Kubernetes, Docker, Terraform, CI/CD</li>
+          <li>Languages: Python, Go, JavaScript/Node.js</li>
+          <li>AI tooling: coding-agent guardrails, MCP, codebase analysis, local model compatibility</li>
         </ul>
       </div>
     </section>
@@ -1356,13 +1552,14 @@
 
     <!-- CONTACT -->
     <section id="contact" class="contact" aria-labelledby="contact-label">
-      <h2 class="contact-heading" id="contact-label">Let's build something<br>worth building.</h2>
-      <p class="contact-sub">Open to collaborations, consulting, and conversations about hard problems.</p>
+      <h2 class="contact-heading" id="contact-label">Let's work on a hard problem.</h2>
+      <p class="contact-sub">I'm interested in hard engineering problems in AI, security, and infrastructure, and teams that value technical depth, ownership, and thoughtful execution.</p>
+      <p class="contact-resume"><span>://</span> Resume available on request</p>
       <div class="contact-links">
         <a href="mailto:aditya005@gmail.com" class="contact-link primary">Email me</a>
+        <a href="https://www.linkedin.com/in/adityaarakeri/" class="contact-link" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/adityaarakeri" class="contact-link" target="_blank" rel="noopener">GitHub</a>
         <a href="https://x.com/aditya005" class="contact-link" target="_blank" rel="noopener">Twitter / X</a>
-        <a href="https://www.linkedin.com/in/adityaarakeri/" class="contact-link" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </section>
 
@@ -1380,7 +1577,8 @@
   <!-- MOBILE OVERLAY — lives at body level to escape stacking contexts -->
   <div class="mobile-overlay" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <ul class="mobile-overlay-links">
-      <li><a href="#projects">Work</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#posts">Writing</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -1682,7 +1880,7 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.project-card, .post-item, .about-text, .about-stack, .contact-heading, .contact-sub, .contact-links').forEach(function (el) {
+    document.querySelectorAll('.project-card, .post-item, .about-text, .about-stack, .contact-heading, .contact-sub, .contact-resume, .contact-links, .case, .outcome, .timeline-item').forEach(function (el) {
       el.classList.add('reveal-on-scroll');
       observer.observe(el);
     });
