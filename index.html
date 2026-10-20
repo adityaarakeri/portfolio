@@ -659,6 +659,169 @@
     .post-item:hover .arrow,
     .post-item:focus-visible .arrow { transform: translate(2px, -2px); }
 
+    /* ============================================================
+       AGENT SKILLS: install line + category shelf. Not repos, so the
+       tiles are frames holding links, not links themselves.
+    ============================================================ */
+    .skills { padding: 0 0 var(--space-section); }
+
+    .skills-lede {
+      max-width: 62ch;
+      margin-bottom: 24px;
+      font-size: var(--size-body);
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+
+    .install { display: grid; gap: 8px; max-width: 640px; }
+    .install-row {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+    }
+    .install dt {
+      font-size: var(--size-label);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .install dd {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      padding: 4px 4px 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(126,203,143,0.04);
+    }
+    /* Long commands wrap inside their box, never widen the page; the copy
+       button still copies the exact single-line command */
+    .install code {
+      flex: 1;
+      min-width: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      padding: 6px 0;
+      font-family: var(--font);
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+    .install code .tok { display: inline-block; max-width: 100%; }
+    .copy-btn {
+      flex-shrink: 0;
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px dashed var(--border-hover);
+      border-radius: 4px;
+      background: none;
+      font-family: var(--font);
+      font-size: var(--size-label);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 200ms ease, border-color 200ms ease;
+    }
+    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .copy-btn.is-done { color: var(--accent); border-style: solid; border-color: var(--accent); }
+    @media (max-width: 560px) {
+      .install-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    }
+    .install-note {
+      margin: 10px 0 32px;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* Narrower minimum than .projects-grid so all three categories share
+       one row inside the 860px column */
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+    .skill-shelf {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 24px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      transition: border-color 200ms ease, background 200ms ease;
+    }
+    .skill-shelf:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+    .skill-shelf .group-title { margin: 0; }
+    .shelf-blurb {
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    .shelf-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+    }
+    .shelf-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .shelf-name {
+      font-size: var(--size-body);
+      font-weight: 600;
+      color: var(--text-primary);
+      overflow-wrap: anywhere;
+      transition: color 200ms ease;
+    }
+    .shelf-link .arrow {
+      display: inline-block;
+      margin-left: 6px;
+      color: var(--accent);
+      transition: transform 200ms ease;
+    }
+    .shelf-tagline {
+      display: block;
+      margin-top: 2px;
+      font-size: 0.75rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .shelf-link:hover .shelf-name,
+    .shelf-link:focus-visible .shelf-name { color: var(--accent); }
+    .shelf-link:hover .arrow,
+    .shelf-link:focus-visible .arrow { transform: translateX(3px); }
+
+    .shelf-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-top: 24px;
+      font-size: var(--size-label);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .shelf-total::before { content: '[ '; color: var(--accent); }
+    .shelf-total::after  { content: ' ]'; color: var(--accent); }
+    .shelf-browse {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed transparent;
+      transition: border-color 200ms ease;
+    }
+    .shelf-browse:hover { border-color: var(--accent); }
+    .shelf-browse:hover .arrow,
+    .shelf-browse:focus-visible .arrow { transform: translateX(3px); }
+    .shelf-browse .arrow { display: inline-block; transition: transform 200ms ease; }
+
     /* Visually hidden, still read by screen readers */
     .sr-only {
       position: absolute;
@@ -1051,6 +1214,11 @@
     /* ============================================================
        RESPONSIVE ADJUSTMENTS
     ============================================================ */
+    /* Six nav links: tighten before the burger takes over at 640px */
+    @media (max-width: 760px) {
+      .nav-links { gap: 20px; }
+    }
+
     @media (max-width: 480px) {
       .nav-links { gap: 20px; }
       .projects-grid { grid-template-columns: 1fr; }
@@ -1275,6 +1443,7 @@
       <ul class="nav-links">
         <li><a href="#experience">Experience</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#posts">Writing</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -1429,16 +1598,6 @@
       <p class="group-title">More projects</p>
       <div class="projects-grid">
 
-        <a href="/skills/" class="project-card">
-          <div class="card-header">
-            <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 6 C10 4.5 7 4.5 4 5.5 V18.5 C7 17.5 10 17.5 12 19 C14 17.5 17 17.5 20 18.5 V5.5 C17 4.5 14 4.5 12 6 Z"/><line x1="12" y1="6" x2="12" y2="19"/></svg></div>
-            <span class="card-name">agent skills</span>
-          </div>
-          <p class="card-tagline"><em>Playbooks for coding agents, one install line each.</em></p>
-          <p class="card-desc">Sixteen SKILL.md playbooks in seven plugins: engineering discipline (senior-agent-skills, yolo), writing without AI tells (humanize-content), pages that don't look generated (handcraft-html), and decision coaching. Works in Claude Code, Codex, Cursor, and more.</p>
-          <span class="card-meta"><span>catalog</span><span class="sep">·</span><span>7 plugins</span><span class="sep">·</span><span>16 skills</span><span class="sep">·</span><span class="go">browse <span class="arrow" aria-hidden="true">→</span></span></span>
-        </a>
-
         <a href="https://github.com/adityaarakeri/fuelgauge" class="project-card" target="_blank" rel="noopener">
           <div class="card-header">
             <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 17 A 8 8 0 1 1 19 17"/><line x1="12" y1="13" x2="16.8" y2="8.2"/><circle cx="12" cy="13" r="1.5"/></svg></div>
@@ -1460,6 +1619,61 @@
         </a>
 
       </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- AGENT SKILLS
+         Hand-written summary of /skills/. Plugin names, ids, and the totals
+         mirror adityaarakeri/skills/catalog.json; update them together. -->
+    <section id="skills" class="skills" aria-labelledby="skills-label">
+      <p class="section-label reveal reveal-1" id="skills-label">Agent skills</p>
+      <p class="skills-lede">
+        Playbooks I wrote for my own coding agents and kept using. Each is a
+        plain SKILL.md file, so it works in Claude Code, Codex, Cursor, and
+        most other agents.
+      </p>
+      <dl class="install">
+        <div class="install-row"><dt>Claude Code</dt><dd><code><span class="tok">/plugin</span> <span class="tok">marketplace</span> <span class="tok">add</span> <span class="tok">adityaarakeri/skills</span></code><button class="copy-btn" type="button" data-copy="/plugin marketplace add adityaarakeri/skills" hidden>copy</button></dd></div>
+      </dl>
+      <p class="install-note">Adds the whole catalog to <code>/plugin</code>. Other agents: each skill has an <code>npx skills</code> line in the catalog.</p>
+
+      <div class="shelf-grid">
+
+        <div class="skill-shelf">
+          <p class="group-title">Engineering discipline</p>
+          <p class="shelf-blurb">Make a coding agent work like a careful senior engineer.</p>
+          <ul class="shelf-list">
+            <li><a class="shelf-link" href="/skills/#senior-agent-skills"><span class="shelf-name">senior-agent-skills</span><span class="arrow" aria-hidden="true">→</span><span class="shelf-tagline">Ten playbooks: plan, test, and verify before shipping.</span></a></li>
+            <li><a class="shelf-link" href="/skills/#yolo"><span class="shelf-name">yolo</span><span class="arrow" aria-hidden="true">→</span><span class="shelf-tagline">One goal in, one report out.</span></a></li>
+            <li><a class="shelf-link" href="/skills/#context-relay-tdd"><span class="shelf-name">context-relay-tdd</span><span class="arrow" aria-hidden="true">→</span><span class="shelf-tagline">Test-first fixes that survive context resets.</span></a></li>
+          </ul>
+        </div>
+
+        <div class="skill-shelf">
+          <p class="group-title">Writing and design</p>
+          <p class="shelf-blurb">Output that reads and looks like a person made it.</p>
+          <ul class="shelf-list">
+            <li><a class="shelf-link" href="/skills/#humanize-content"><span class="shelf-name">humanize-content</span><span class="arrow" aria-hidden="true">→</span><span class="shelf-tagline">Strips AI tells without adding new ones.</span></a></li>
+            <li><a class="shelf-link" href="/skills/#handcraft-html"><span class="shelf-name">handcraft-html</span><span class="arrow" aria-hidden="true">→</span><span class="shelf-tagline">HTML pages that don't read as generated.</span></a></li>
+            <li><a class="shelf-link" href="/skills/#frontend-engineering"><span class="shelf-name">frontend-engineering</span><span class="arrow" aria-hidden="true">→</span><span class="shelf-tagline">Senior frontend judgment for framework apps.</span></a></li>
+          </ul>
+        </div>
+
+        <div class="skill-shelf">
+          <p class="group-title">Judgment</p>
+          <p class="shelf-blurb">For the decisions that do not come with a test suite.</p>
+          <ul class="shelf-list">
+            <li><a class="shelf-link" href="/skills/#judgment-coach"><span class="shelf-name">judgment-coach</span><span class="arrow" aria-hidden="true">→</span><span class="shelf-tagline">Coaches a decision instead of making it for you.</span></a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <p class="shelf-foot">
+        <span class="shelf-total">7 plugins · 16 skills</span>
+        <a class="shelf-browse" href="/skills/">Browse the catalog <span class="arrow" aria-hidden="true">→</span></a>
+      </p>
     </section>
 
     <div class="section-divider"></div>
@@ -1569,6 +1783,7 @@
     <ul class="mobile-overlay-links">
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#posts">Writing</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -1725,6 +1940,38 @@
           });
         })
         .catch(function () { /* offline or rate limited: static text stays */ });
+    })();
+
+    // ── Copy buttons: only shown where the clipboard API is available ──
+    (function () {
+      if (!navigator.clipboard || !window.isSecureContext) return;
+      document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.hidden = false;
+        btn.setAttribute('aria-label', 'Copy: ' + btn.getAttribute('data-copy'));
+        btn.addEventListener('click', function () {
+          navigator.clipboard.writeText(btn.getAttribute('data-copy')).then(function () {
+            flash(btn, 'copied', true);
+          }, function () {
+            // Clipboard refused (permissions): select the text so Ctrl+C works
+            var code = btn.parentNode.querySelector('code');
+            var range = document.createRange();
+            range.selectNodeContents(code);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            flash(btn, 'ctrl+c', false);
+          });
+        });
+      });
+      function flash(btn, text, done) {
+        btn.textContent = text;
+        btn.classList.toggle('is-done', done);
+        clearTimeout(btn._reset);
+        btn._reset = setTimeout(function () {
+          btn.textContent = 'copy';
+          btn.classList.remove('is-done');
+        }, 1600);
+      }
     })();
 
     document.addEventListener('DOMContentLoaded', function () {
